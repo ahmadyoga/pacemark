@@ -1,6 +1,6 @@
 # Pacemark Next.js Migration — Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Migrate Pacemark from a vanilla HTML/CDN-React prototype to a production Next.js 15 app with real Strava OAuth, live activity data, and functional PNG/clipboard sticker export deployed on Vercel.
 
@@ -72,7 +72,7 @@ __tests__/
 - Create: `.env.local.example`
 - Create: `jest.config.ts`, `jest.setup.ts`
 
-- [ ] **Step 1: Scaffold Next.js app into current directory**
+- [x] **Step 1: Scaffold Next.js app into current directory**
 
 ```bash
 npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias "@/*"
@@ -80,19 +80,19 @@ npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir
 
 Answer prompts: Yes to TypeScript, Yes to ESLint, Yes to Tailwind, No to `src/` dir, Yes to App Router, `@/*` for import alias.
 
-- [ ] **Step 2: Install runtime dependencies**
+- [x] **Step 2: Install runtime dependencies**
 
 ```bash
 npm install iron-session html2canvas
 ```
 
-- [ ] **Step 3: Install test dependencies**
+- [x] **Step 3: Install test dependencies**
 
 ```bash
 npm install --save-dev jest @testing-library/react @testing-library/jest-dom @testing-library/user-event jest-environment-jsdom
 ```
 
-- [ ] **Step 4: Create jest.config.ts**
+- [x] **Step 4: Create jest.config.ts**
 
 ```ts
 import type { Config } from 'jest'
@@ -109,13 +109,13 @@ const config: Config = {
 export default createJestConfig(config)
 ```
 
-- [ ] **Step 5: Create jest.setup.ts**
+- [x] **Step 5: Create jest.setup.ts**
 
 ```ts
 import '@testing-library/jest-dom'
 ```
 
-- [ ] **Step 6: Add test script to package.json**
+- [x] **Step 6: Add test script to package.json**
 
 In `package.json` `scripts` section, add:
 ```json
@@ -123,7 +123,7 @@ In `package.json` `scripts` section, add:
 "test:watch": "jest --watch"
 ```
 
-- [ ] **Step 7: Create .env.local.example**
+- [x] **Step 7: Create .env.local.example**
 
 ```
 STRAVA_CLIENT_ID=
@@ -132,14 +132,14 @@ SESSION_PASSWORD=change_me_to_at_least_32_random_characters
 NEXT_PUBLIC_BASE_URL=http://localhost:3000
 ```
 
-- [ ] **Step 8: Add .env.local to .gitignore**
+- [x] **Step 8: Add .env.local to .gitignore**
 
 Verify `.gitignore` contains `.env.local` (create-next-app adds it by default). Also add:
 ```
 .env.local
 ```
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add -A
@@ -156,7 +156,7 @@ git commit -m "chore: scaffold Next.js 15 project with jest"
 
 *No unit tests — configuration only.*
 
-- [ ] **Step 1: Replace tailwind.config.ts**
+- [x] **Step 1: Replace tailwind.config.ts**
 
 ```ts
 import type { Config } from 'tailwindcss'
@@ -199,7 +199,7 @@ const config: Config = {
 export default config
 ```
 
-- [ ] **Step 2: Replace app/globals.css**
+- [x] **Step 2: Replace app/globals.css**
 
 ```css
 @tailwind base;
@@ -254,7 +254,7 @@ button {
 button:disabled { cursor: not-allowed; }
 ```
 
-- [ ] **Step 3: Update app/layout.tsx**
+- [x] **Step 3: Update app/layout.tsx**
 
 ```tsx
 import type { Metadata } from 'next'
@@ -274,7 +274,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 }
 ```
 
-- [ ] **Step 4: Verify dev server starts**
+- [x] **Step 4: Verify dev server starts**
 
 ```bash
 npm run dev
@@ -282,7 +282,7 @@ npm run dev
 
 Expected: server starts on http://localhost:3000 with no errors.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add tailwind.config.ts app/globals.css app/layout.tsx
@@ -297,7 +297,7 @@ git commit -m "style: add design tokens and global CSS"
 - Create: `lib/strava.ts`
 - Create: `__tests__/lib/strava.test.ts`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Create `__tests__/lib/strava.test.ts`:
 
@@ -373,7 +373,7 @@ describe('toDisplayActivity', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests — verify they fail**
+- [x] **Step 2: Run tests — verify they fail**
 
 ```bash
 npm test -- --testPathPattern=strava --verbose
@@ -381,7 +381,7 @@ npm test -- --testPathPattern=strava --verbose
 
 Expected: `Cannot find module '@/lib/strava'`
 
-- [ ] **Step 3: Create lib/strava.ts**
+- [x] **Step 3: Create lib/strava.ts**
 
 ```ts
 export interface ActivitySummary {
@@ -497,7 +497,7 @@ export async function getActivityFromStrava(
 }
 ```
 
-- [ ] **Step 4: Run tests — verify they pass**
+- [x] **Step 4: Run tests — verify they pass**
 
 ```bash
 npm test -- --testPathPattern=strava --verbose
@@ -505,7 +505,7 @@ npm test -- --testPathPattern=strava --verbose
 
 Expected: all 8 tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lib/strava.ts __tests__/lib/strava.test.ts
@@ -521,7 +521,7 @@ git commit -m "feat: add Strava types, formatters, and API client"
 
 *No unit tests — iron-session wrapper with no logic to isolate.*
 
-- [ ] **Step 1: Create lib/session.ts**
+- [x] **Step 1: Create lib/session.ts**
 
 ```ts
 import { getIronSession, type SessionOptions } from 'iron-session'
@@ -552,7 +552,7 @@ export async function getSession() {
 }
 ```
 
-- [ ] **Step 2: Verify TypeScript compiles**
+- [x] **Step 2: Verify TypeScript compiles**
 
 ```bash
 npx tsc --noEmit
@@ -560,7 +560,7 @@ npx tsc --noEmit
 
 Expected: no errors.
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add lib/session.ts
@@ -577,7 +577,7 @@ git commit -m "feat: add iron-session helper"
 
 *Manual test via browser — OAuth redirect can't be unit tested without a live Strava client.*
 
-- [ ] **Step 1: Create app/api/auth/strava/route.ts**
+- [x] **Step 1: Create app/api/auth/strava/route.ts**
 
 ```ts
 import { NextResponse } from 'next/server'
@@ -596,7 +596,7 @@ export async function GET() {
 }
 ```
 
-- [ ] **Step 2: Create app/api/auth/callback/route.ts**
+- [x] **Step 2: Create app/api/auth/callback/route.ts**
 
 ```ts
 import { NextRequest, NextResponse } from 'next/server'
@@ -642,7 +642,7 @@ export async function GET(request: NextRequest) {
 }
 ```
 
-- [ ] **Step 3: Verify TypeScript compiles**
+- [x] **Step 3: Verify TypeScript compiles**
 
 ```bash
 npx tsc --noEmit
@@ -650,7 +650,7 @@ npx tsc --noEmit
 
 Expected: no errors.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add app/api/auth/
@@ -666,7 +666,7 @@ git commit -m "feat: add Strava OAuth redirect and callback routes"
 - Create: `app/api/activities/[runId]/route.ts`
 - Create: `__tests__/api/activities.test.ts`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Create `__tests__/api/activities.test.ts`:
 
@@ -749,7 +749,7 @@ describe('GET /api/activities', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests — verify they fail**
+- [x] **Step 2: Run tests — verify they fail**
 
 ```bash
 npm test -- --testPathPattern=activities --verbose
@@ -757,7 +757,7 @@ npm test -- --testPathPattern=activities --verbose
 
 Expected: `Cannot find module '@/app/api/activities/route'`
 
-- [ ] **Step 3: Create app/api/activities/route.ts**
+- [x] **Step 3: Create app/api/activities/route.ts**
 
 ```ts
 import { NextResponse } from 'next/server'
@@ -796,7 +796,7 @@ export async function GET() {
 }
 ```
 
-- [ ] **Step 4: Create app/api/activities/[runId]/route.ts**
+- [x] **Step 4: Create app/api/activities/[runId]/route.ts**
 
 ```ts
 import { NextRequest, NextResponse } from 'next/server'
@@ -845,7 +845,7 @@ export async function GET(
 }
 ```
 
-- [ ] **Step 5: Run tests — verify they pass**
+- [x] **Step 5: Run tests — verify they pass**
 
 ```bash
 npm test -- --testPathPattern=activities --verbose
@@ -853,7 +853,7 @@ npm test -- --testPathPattern=activities --verbose
 
 Expected: all 3 tests pass.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add app/api/activities/ __tests__/api/
@@ -868,7 +868,7 @@ git commit -m "feat: add activity proxy API routes with token refresh"
 - Create: `middleware.ts`
 - Create: `__tests__/middleware.test.ts`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Create `__tests__/middleware.test.ts`:
 
@@ -904,7 +904,7 @@ describe('middleware', () => {
 })
 ```
 
-- [ ] **Step 2: Run tests — verify they fail**
+- [x] **Step 2: Run tests — verify they fail**
 
 ```bash
 npm test -- --testPathPattern=middleware --verbose
@@ -912,7 +912,7 @@ npm test -- --testPathPattern=middleware --verbose
 
 Expected: `Cannot find module '@/middleware'`
 
-- [ ] **Step 3: Create middleware.ts**
+- [x] **Step 3: Create middleware.ts**
 
 ```ts
 import { NextRequest, NextResponse } from 'next/server'
@@ -930,7 +930,7 @@ export const config = {
 }
 ```
 
-- [ ] **Step 4: Run tests — verify they pass**
+- [x] **Step 4: Run tests — verify they pass**
 
 ```bash
 npm test -- --testPathPattern=middleware --verbose
@@ -938,7 +938,7 @@ npm test -- --testPathPattern=middleware --verbose
 
 Expected: all 3 tests pass.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add middleware.ts __tests__/middleware.test.ts
@@ -955,7 +955,7 @@ git commit -m "feat: add edge middleware auth guard"
 
 *No unit tests — pure visual SVG components.*
 
-- [ ] **Step 1: Create components/ui/RouteLine.tsx**
+- [x] **Step 1: Create components/ui/RouteLine.tsx**
 
 ```tsx
 interface RouteLineProps {
@@ -1006,7 +1006,7 @@ export function RouteLine({
 }
 ```
 
-- [ ] **Step 2: Create components/ui/MiniMap.tsx**
+- [x] **Step 2: Create components/ui/MiniMap.tsx**
 
 ```tsx
 import { RouteLine } from './RouteLine'
@@ -1046,7 +1046,7 @@ export function MiniMap({ seed = 1, accent = '#FF5A1F' }: MiniMapProps) {
 }
 ```
 
-- [ ] **Step 3: Commit**
+- [x] **Step 3: Commit**
 
 ```bash
 git add components/ui/RouteLine.tsx components/ui/MiniMap.tsx
@@ -1068,7 +1068,7 @@ git commit -m "feat: add RouteLine and MiniMap UI components"
 - Create: `components/stickers/StickerChat.tsx`
 - Create: `__tests__/components/StickerBigNumber.test.tsx`
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 Create `__tests__/components/StickerBigNumber.test.tsx`:
 
@@ -1102,7 +1102,7 @@ describe('StickerBigNumber', () => {
 })
 ```
 
-- [ ] **Step 2: Run test — verify it fails**
+- [x] **Step 2: Run test — verify it fails**
 
 ```bash
 npm test -- --testPathPattern=StickerBigNumber --verbose
@@ -1110,7 +1110,7 @@ npm test -- --testPathPattern=StickerBigNumber --verbose
 
 Expected: `Cannot find module '@/components/stickers/StickerBigNumber'`
 
-- [ ] **Step 3: Create components/stickers/types.ts**
+- [x] **Step 3: Create components/stickers/types.ts**
 
 Types and utilities extracted into a separate file so sticker components can import from here without creating a circular dependency with `index.ts`.
 
@@ -1172,7 +1172,7 @@ Create `components/stickers/index.ts` (just re-exports for now — STICKER_DEFS 
 export * from './types'
 ```
 
-- [ ] **Step 4: Create components/stickers/StickerBigNumber.tsx**
+- [x] **Step 4: Create components/stickers/StickerBigNumber.tsx**
 
 ```tsx
 'use client'
@@ -1206,7 +1206,7 @@ export function StickerBigNumber({ run, visible, accent }: StickerProps) {
 
 Add the CSS classes for sticker overlay components to `app/globals.css` — copy the full `.ovl*` block from `styles.css` in the prototype root (lines starting with `/* STICKERS */`).
 
-- [ ] **Step 5: Create remaining sticker components**
+- [x] **Step 5: Create remaining sticker components**
 
 Create `components/stickers/StickerBoldCaps.tsx`:
 
@@ -1337,7 +1337,7 @@ export function StickerChat({ run, visible, accent }: StickerProps) {
 }
 ```
 
-- [ ] **Step 6: Replace components/stickers/index.ts with full content including STICKER_DEFS**
+- [x] **Step 6: Replace components/stickers/index.ts with full content including STICKER_DEFS**
 
 ```ts
 export * from './types'
@@ -1360,11 +1360,11 @@ export const STICKER_DEFS: StickerDef[] = [
 ]
 ```
 
-- [ ] **Step 7: Copy sticker CSS to globals.css**
+- [x] **Step 7: Copy sticker CSS to globals.css**
 
 Append the full `.ovl*` CSS block from the prototype's `styles.css` (the section marked `STICKERS — overlay style`) to `app/globals.css`.
 
-- [ ] **Step 8: Run tests — verify they pass**
+- [x] **Step 8: Run tests — verify they pass**
 
 ```bash
 npm test -- --testPathPattern=StickerBigNumber --verbose
@@ -1372,7 +1372,7 @@ npm test -- --testPathPattern=StickerBigNumber --verbose
 
 Expected: both tests pass.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add components/stickers/ __tests__/components/StickerBigNumber.test.tsx
@@ -1389,7 +1389,7 @@ git commit -m "feat: add 6 sticker components"
 - Create: `__tests__/lib/export.test.ts`
 - Create: `__tests__/components/StickerTile.test.tsx`
 
-- [ ] **Step 1: Write failing export test**
+- [x] **Step 1: Write failing export test**
 
 Create `__tests__/lib/export.test.ts`:
 
@@ -1419,7 +1419,7 @@ describe('downloadBlob', () => {
 })
 ```
 
-- [ ] **Step 2: Run test — verify it fails**
+- [x] **Step 2: Run test — verify it fails**
 
 ```bash
 npm test -- --testPathPattern=export --verbose
@@ -1427,7 +1427,7 @@ npm test -- --testPathPattern=export --verbose
 
 Expected: `Cannot find module '@/lib/export'`
 
-- [ ] **Step 3: Create lib/export.ts**
+- [x] **Step 3: Create lib/export.ts**
 
 ```ts
 import html2canvas from 'html2canvas'
@@ -1461,7 +1461,7 @@ export async function copyBlobToClipboard(blob: Blob): Promise<void> {
 }
 ```
 
-- [ ] **Step 4: Run export test — verify it passes**
+- [x] **Step 4: Run export test — verify it passes**
 
 ```bash
 npm test -- --testPathPattern=lib/export --verbose
@@ -1469,7 +1469,7 @@ npm test -- --testPathPattern=lib/export --verbose
 
 Expected: 1 test passes.
 
-- [ ] **Step 5: Write failing StickerTile test**
+- [x] **Step 5: Write failing StickerTile test**
 
 Create `__tests__/components/StickerTile.test.tsx`:
 
@@ -1513,7 +1513,7 @@ describe('StickerTile', () => {
 })
 ```
 
-- [ ] **Step 6: Run StickerTile test — verify it fails**
+- [x] **Step 6: Run StickerTile test — verify it fails**
 
 ```bash
 npm test -- --testPathPattern=StickerTile --verbose
@@ -1521,7 +1521,7 @@ npm test -- --testPathPattern=StickerTile --verbose
 
 Expected: `Cannot find module '@/components/ui/StickerTile'`
 
-- [ ] **Step 7: Create components/ui/StickerTile.tsx**
+- [x] **Step 7: Create components/ui/StickerTile.tsx**
 
 ```tsx
 'use client'
@@ -1615,7 +1615,7 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
 }
 ```
 
-- [ ] **Step 8: Run all tests — verify they pass**
+- [x] **Step 8: Run all tests — verify they pass**
 
 ```bash
 npm test -- --verbose
@@ -1623,7 +1623,7 @@ npm test -- --verbose
 
 Expected: all tests pass.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add lib/export.ts components/ui/StickerTile.tsx __tests__/lib/export.test.ts __tests__/components/StickerTile.test.tsx
@@ -1637,7 +1637,7 @@ git commit -m "feat: add export lib and StickerTile with copy/PNG"
 **Files:**
 - Modify: `app/page.tsx`
 
-- [ ] **Step 1: Replace app/page.tsx**
+- [x] **Step 1: Replace app/page.tsx**
 
 ```tsx
 'use client'
@@ -1725,7 +1725,7 @@ export default function LandingPage() {
 
 Add to `app/globals.css` — copy the full `SCREEN 1 — LANDING` CSS block from the prototype's `styles.css`.
 
-- [ ] **Step 2: Handle error query param**
+- [x] **Step 2: Handle error query param**
 
 Update `LandingPage` to read the `error` search param on mount:
 
@@ -1750,7 +1750,7 @@ export default function LandingPage() {
 
 Refactor the full component to use `LandingContent` as the inner component and `LandingPage` as the `Suspense` wrapper.
 
-- [ ] **Step 3: Verify landing renders**
+- [x] **Step 3: Verify landing renders**
 
 ```bash
 npm run dev
@@ -1758,7 +1758,7 @@ npm run dev
 
 Open http://localhost:3000. Expected: dark landing screen with "pacemark" logo and orange "Connect with Strava" button.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add app/page.tsx
@@ -1773,7 +1773,7 @@ git commit -m "feat: add landing page with Strava connect"
 - Create: `app/picker/page.tsx`
 - Create: `components/ui/RunCard.tsx`
 
-- [ ] **Step 1: Create components/ui/RunCard.tsx**
+- [x] **Step 1: Create components/ui/RunCard.tsx**
 
 ```tsx
 'use client'
@@ -1849,7 +1849,7 @@ export function RunCard({ run, active, onClick, accent }: RunCardProps) {
 
 Add to `app/globals.css` — copy the full `SCREEN 2 — PICKER` CSS block from the prototype's `styles.css`.
 
-- [ ] **Step 2: Create app/picker/page.tsx**
+- [x] **Step 2: Create app/picker/page.tsx**
 
 ```tsx
 'use client'
@@ -1966,7 +1966,7 @@ export default function PickerPage() {
 }
 ```
 
-- [ ] **Step 3: Add disconnect route**
+- [x] **Step 3: Add disconnect route**
 
 Create `app/api/auth/strava/route.ts` — update to export both `GET` and `DELETE`:
 
@@ -1994,11 +1994,11 @@ export async function DELETE() {
 }
 ```
 
-- [ ] **Step 4: Verify picker renders**
+- [x] **Step 4: Verify picker renders**
 
 With dev server running, after OAuth callback, navigate to http://localhost:3000/picker. Expected: list of activities from Strava with MiniMap route lines. Without a real Strava account, verify the page redirects to `/` on 401.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add app/picker/ components/ui/RunCard.tsx app/api/auth/strava/route.ts
@@ -2012,7 +2012,7 @@ git commit -m "feat: add activity picker page"
 **Files:**
 - Create: `app/studio/[runId]/page.tsx`
 
-- [ ] **Step 1: Create app/studio/[runId]/page.tsx**
+- [x] **Step 1: Create app/studio/[runId]/page.tsx**
 
 ```tsx
 'use client'
@@ -2173,7 +2173,7 @@ export default function StudioPage() {
 
 Add to `app/globals.css` — copy the full `SCREEN 3 — STUDIO` CSS block from the prototype's `styles.css`.
 
-- [ ] **Step 2: Verify full flow in browser**
+- [x] **Step 2: Verify full flow in browser**
 
 ```bash
 npm run dev
@@ -2187,7 +2187,7 @@ npm run dev
 6. Click "Copy" on Big Number tile — browser requests clipboard permission, tile shows "✓ Copied".
 7. Click "PNG" on any tile — PNG file downloads.
 
-- [ ] **Step 3: Run all tests**
+- [x] **Step 3: Run all tests**
 
 ```bash
 npm test
@@ -2195,7 +2195,7 @@ npm test
 
 Expected: all tests pass with no failures.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add app/studio/
@@ -2209,18 +2209,18 @@ git commit -m "feat: add sticker studio page"
 **Files:**
 - Create: `vercel.json` (optional — only if custom rewrites needed)
 
-- [ ] **Step 1: Push to GitHub**
+- [x] **Step 1: Push to GitHub**
 
 ```bash
 git remote add origin https://github.com/<your-username>/pacemark.git
 git push -u origin master
 ```
 
-- [ ] **Step 2: Create Vercel project**
+- [x] **Step 2: Create Vercel project**
 
 Go to https://vercel.com/new → import the GitHub repo → accept default Next.js settings.
 
-- [ ] **Step 3: Add environment variables in Vercel dashboard**
+- [x] **Step 3: Add environment variables in Vercel dashboard**
 
 Under Settings → Environment Variables, add:
 
@@ -2231,15 +2231,15 @@ Under Settings → Environment Variables, add:
 | `SESSION_PASSWORD` | 32+ random chars (generate: `openssl rand -base64 32`) |
 | `NEXT_PUBLIC_BASE_URL` | your Vercel deployment URL e.g. `https://pacemark.vercel.app` |
 
-- [ ] **Step 4: Add Vercel callback URL to Strava app**
+- [x] **Step 4: Add Vercel callback URL to Strava app**
 
 In Strava API settings → Authorization Callback Domain: add your Vercel domain (e.g. `pacemark.vercel.app`).
 
-- [ ] **Step 5: Trigger deploy and verify**
+- [x] **Step 5: Trigger deploy and verify**
 
 Push any commit to `master`. Vercel auto-deploys. Visit the deployed URL and run through the full OAuth flow.
 
-- [ ] **Step 6: Final commit**
+- [x] **Step 6: Final commit**
 
 ```bash
 git add .
