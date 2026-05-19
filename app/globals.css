@@ -1132,3 +1132,291 @@ button:disabled { cursor: not-allowed; }
   color: rgba(0, 0, 0, 0.4);
   margin-top: 4px;
 }
+
+/* ============================================================
+   STICKER — Map Only
+   ============================================================ */
+
+.ovl-maponly {
+  width: 200px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 14px;
+}
+.ovl-mo-route { flex: 1; }
+.ovl-mo-city {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.45);
+  margin-top: 8px;
+}
+
+/* ============================================================
+   STICKER — Map + Stats Bar
+   ============================================================ */
+
+.ovl-mapstats {
+  width: 220px;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.ovl-ms-route { height: 120px; padding: 12px 12px 4px; }
+.ovl-ms-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.45);
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+.ovl-ms-stat { flex: 1; text-align: center; }
+.ovl-ms-v {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  display: block;
+  letter-spacing: -0.01em;
+}
+.ovl-ms-u {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  color: rgba(255, 255, 255, 0.38);
+  letter-spacing: 0.06em;
+}
+.ovl-ms-div {
+  width: 1px;
+  height: 28px;
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* ============================================================
+   STICKER — Map + Panel
+   ============================================================ */
+
+.ovl-mappanel {
+  width: 240px;
+  height: 130px;
+  display: flex;
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.ovl-mp-map {
+  flex: 1.3;
+  padding: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.07);
+}
+.ovl-mp-panel {
+  width: 90px;
+  flex-shrink: 0;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.ovl-mp-city {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.35);
+  margin-bottom: 4px;
+}
+.ovl-mp-rows { display: flex; flex-direction: column; gap: 5px; }
+.ovl-mp-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 4px;
+}
+.ovl-mp-k {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  color: rgba(255, 255, 255, 0.3);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+.ovl-mp-v {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+.ovl-mp-u { font-size: 8px; font-weight: 400; opacity: 0.6; }
+
+/* ============================================================
+   STICKER — Glow Splits (opacity gradient bars, no text)
+   ============================================================ */
+
+.ovl-glowsplits {
+  width: 200px;
+  padding: 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+.ovl-gs-row { width: 100%; }
+.ovl-gs-bar {
+  height: 11px;
+  border-radius: 7px;
+  transition: none;
+}
+.ovl-gs-empty {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================================
+   STICKER — Staggered Strips
+   ============================================================ */
+
+.ovl-strips {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  width: 220px;
+}
+.ovl-strip-row { display: flex; }
+.ovl-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
+  border-radius: 6px;
+}
+.ovl-strip-lbl {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  color: rgba(0, 0, 0, 0.5);
+  min-width: 52px;
+  flex-shrink: 0;
+}
+.ovl-strip-val {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  color: #0a0a0a;
+  letter-spacing: -0.03em;
+}
+.ovl-strip-unit {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.45);
+  margin-left: 2px;
+}
+
+/* ============================================================
+   STICKER — Terminal
+   ============================================================ */
+
+.ovl-terminal {
+  display: flex;
+  width: 220px;
+  background: #0d1017;
+  border-radius: 10px;
+  overflow: hidden;
+}
+.ovl-term-accent { width: 3px; flex-shrink: 0; }
+.ovl-term-body {
+  flex: 1;
+  padding: 14px 14px 14px 12px;
+  font-family: var(--font-mono);
+}
+.ovl-term-cmd {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 12px;
+  letter-spacing: 0.01em;
+}
+.ovl-term-prompt { font-weight: 700; margin-right: 6px; }
+.ovl-term-rows { display: flex; flex-direction: column; gap: 6px; }
+.ovl-term-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+}
+.ovl-term-k {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+  min-width: 38px;
+}
+.ovl-term-v {
+  font-size: 11.5px;
+  color: rgba(255, 255, 255, 0.68);
+  font-weight: 500;
+}
+
+/* ============================================================
+   STICKER — Vertical Run
+   ============================================================ */
+
+.ovl-vertrun {
+  text-align: right;
+  padding: 4px 0;
+}
+.ovl-vr-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  margin-bottom: 6px;
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.25);
+}
+.ovl-vr-num {
+  font-family: var(--font-display);
+  font-size: 54px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.5),
+    0 6px 24px rgba(0, 0, 0, 0.35),
+    0 0 48px rgba(255, 255, 255, 0.08);
+}
+.ovl-vr-unit {
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: 0;
+  margin-left: 3px;
+  opacity: 0.7;
+}
+
+/* ============================================================
+   STICKER — Ghost Stats
+   ============================================================ */
+
+.ovl-ghost {
+  display: flex;
+  gap: 0;
+  padding: 8px 4px;
+}
+.ovl-ghost-col { flex: 1; text-align: center; }
+.ovl-ghost-lbl {
+  font-family: var(--font-ui);
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.3);
+  margin-bottom: 5px;
+  letter-spacing: 0.02em;
+}
+.ovl-ghost-val {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: -0.025em;
+  text-shadow:
+    0 0 18px rgba(255, 255, 255, 0.9),
+    0 0 40px rgba(255, 255, 255, 0.45),
+    0 2px 10px rgba(0, 0, 0, 0.25);
+}
