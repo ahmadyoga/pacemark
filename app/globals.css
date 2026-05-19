@@ -59,4 +59,292 @@
 html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; min-height: 100vh; }
 body { overflow-x: hidden; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+
+/* ============================================================
+   STICKERS — overlay style, transparent background
+   ============================================================ */
+
+.ovl {
+  font-family: var(--font-ui);
+  color: #fff;
+  text-align: left;
+  display: inline-block;
+}
+
+.ovl-bignum {
+  text-align: center;
+  width: 200px;
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+}
+.ovl-bignum-lbl {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 4px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+.ovl-bignum-val {
+  font-family: 'Inter Tight', 'Inter', sans-serif;
+  font-size: 76px;
+  font-weight: 700;
+  line-height: 0.85;
+  letter-spacing: -0.05em;
+  color: #fff;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+.ovl-bignum-unit {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-top: 6px;
+  font-weight: 600;
+}
+.ovl-bignum-foot {
+  display: flex; justify-content: center; gap: 5px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255,255,255,0.85);
+  margin-top: 8px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  white-space: nowrap;
+  flex-wrap: wrap;
+}
+.ovl-bignum-foot-v { font-weight: 600; }
+.ovl-bignum-sep { color: rgba(255,255,255,0.4); }
+
+.ovl-boldcaps {
+  display: flex; align-items: flex-end;
+  gap: 10px;
+  font-family: 'Archivo Black', 'Archivo', sans-serif;
+  color: #fff;
+}
+.ovl-bc-col {
+  display: flex; flex-direction: column;
+  align-items: flex-start;
+  line-height: 0.9;
+}
+.ovl-bc-v {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: 40px;
+  letter-spacing: -0.05em;
+  line-height: 0.85;
+  text-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+.ovl-bc-u {
+  font-family: 'Archivo Black', sans-serif;
+  font-weight: 900;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  margin-top: 5px;
+  color: var(--accent);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+.ovl-bc-col:nth-child(2) .ovl-bc-u { color: #fff; opacity: 0.7; }
+.ovl-bc-col:nth-child(3) .ovl-bc-u { color: var(--accent); }
+
+.ovl-mono {
+  width: 220px;
+  font-family: var(--font-mono);
+  color: #fff;
+}
+.ovl-mono-head {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(255,255,255,0.35);
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+.ovl-mono-dot {
+  width: 7px; height: 7px;
+  background: var(--accent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.3);
+}
+.ovl-mono-rows { display: flex; flex-direction: column; gap: 6px; }
+.ovl-mono-row {
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11.5px;
+  letter-spacing: 0.04em;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+  white-space: nowrap;
+}
+.ovl-mono-k {
+  color: rgba(255,255,255,0.65);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+.ovl-mono-dots {
+  flex: 1;
+  border-bottom: 1px dotted rgba(255,255,255,0.35);
+  margin: 0 4px 3px;
+  height: 1px;
+}
+.ovl-mono-v {
+  font-weight: 600;
+  font-feature-settings: "tnum";
+  flex-shrink: 0;
+}
+
+.ovl-serif {
+  width: 240px;
+  font-family: var(--font-serif);
+  color: #fff;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+.ovl-serif-cap {
+  font-family: 'Instrument Serif', serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: 38px;
+  line-height: 0.96;
+  letter-spacing: -0.015em;
+  margin-bottom: 14px;
+}
+.ovl-serif-stats {
+  display: flex; flex-wrap: wrap; gap: 4px 12px;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+.ovl-serif-stats b { font-weight: 600; color: var(--accent); margin-right: 1px; }
+.ovl-serif-rule {
+  height: 1px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.7), rgba(255,255,255,0));
+  margin: 10px 0 8px;
+}
+.ovl-serif-foot {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255,255,255,0.85);
+  text-transform: lowercase;
+}
+
+.ovl-capsule {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 6px;
+}
+.ovl-cap-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--accent);
+  color: #fff;
+  padding: 7px 14px 7px 12px;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.95), 0 6px 18px -6px rgba(0,0,0,0.4);
+}
+.ovl-cap-pin {
+  width: 9px; height: 9px;
+  background: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  font-size: 0;
+}
+.ovl-cap-txt { line-height: 1; }
+.ovl-cap-div { width: 1px; height: 12px; background: rgba(255,255,255,0.5); }
+.ovl-cap-num {
+  font-family: 'Inter Tight', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.ovl-cap-num span { font-size: 11px; margin-left: 2px; opacity: 0.8; font-weight: 700; }
+.ovl-cap-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0,0,0,0.4);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-left: 8px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
+}
+
+.ovl-chat {
+  display: flex; flex-direction: column; align-items: flex-start;
+  width: 230px;
+}
+.ovl-chat-bubble {
+  position: relative;
+  background: var(--accent);
+  color: #fff;
+  padding: 12px 14px 13px;
+  border-radius: 18px 18px 18px 4px;
+  margin-bottom: 8px;
+  box-shadow: 0 6px 18px -6px rgba(0,0,0,0.45);
+}
+.ovl-chat-msg {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 14.5px;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.ovl-chat-sub { font-family: 'Inter', sans-serif; font-size: 11px; margin-top: 4px; opacity: 0.85; font-weight: 500; }
+.ovl-chat-tail {
+  position: absolute;
+  bottom: -2px; left: -4px;
+  width: 14px; height: 14px;
+  background: var(--accent);
+  border-radius: 0 14px 0 0;
+  transform: rotate(45deg) skew(-12deg, -12deg);
+  z-index: -1;
+}
+.ovl-chat-meta {
+  display: flex; align-items: center; gap: 6px;
+  margin-left: 6px;
+  font-family: 'Inter', sans-serif;
+  font-size: 10.5px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.6);
+}
+.ovl-chat-avatar {
+  width: 18px; height: 18px;
+  background: linear-gradient(135deg, #ff5a1f, #9b5cff);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.tile-stage-light .ovl,
+.tile-stage-light .ovl-bignum-lbl,
+.tile-stage-light .ovl-bignum-val,
+.tile-stage-light .ovl-bignum-foot,
+.tile-stage-light .ovl-bc-v,
+.tile-stage-light .ovl-mono,
+.tile-stage-light .ovl-mono-head,
+.tile-stage-light .ovl-mono-row,
+.tile-stage-light .ovl-serif,
+.tile-stage-light .ovl-serif-cap,
+.tile-stage-light .ovl-serif-foot,
+.tile-stage-light .ovl-chat-meta {
+  color: #18181b;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.4);
+}
+.tile-stage-light .ovl-bignum-val { color: #18181b; text-shadow: 0 2px 8px rgba(255,255,255,0.45); }
+.tile-stage-light .ovl-mono-k { color: rgba(0,0,0,0.55); }
+.tile-stage-light .ovl-mono-head { border-bottom-color: rgba(0,0,0,0.35); }
+.tile-stage-light .ovl-mono-dots { border-bottom-color: rgba(0,0,0,0.35); }
+.tile-stage-light .ovl-serif-rule { background: linear-gradient(90deg, rgba(0,0,0,0.55), rgba(0,0,0,0)); }
+.tile-stage-light .ovl-cap-pill { box-shadow: 0 0 0 2px rgba(0,0,0,0.15), 0 6px 18px -6px rgba(0,0,0,0.3); }
 button:disabled { cursor: not-allowed; }

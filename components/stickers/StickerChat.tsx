@@ -1,0 +1,26 @@
+'use client'
+import type { StickerProps } from './types'
+
+export function StickerChat({ run, visible, accent }: StickerProps) {
+  const headline = visible.distance
+    ? `just ran ${run.distance} km`
+    : `ran a ${run.title.toLowerCase()}`
+  const sub = [
+    visible.duration && `${run.duration} total`,
+    visible.pace && `${run.pace}/km`,
+  ].filter(Boolean).join(' · ')
+
+  return (
+    <div className="ovl ovl-chat" style={{ ['--accent' as string]: accent }}>
+      <div className="ovl-chat-bubble">
+        <div className="ovl-chat-msg">{headline}</div>
+        {sub && <div className="ovl-chat-sub">{sub}</div>}
+        <div className="ovl-chat-tail" />
+      </div>
+      <div className="ovl-chat-meta">
+        <span className="ovl-chat-avatar">PM</span>
+        <span>pacemark · 2m</span>
+      </div>
+    </div>
+  )
+}
