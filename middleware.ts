@@ -7,7 +7,7 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/picker', request.url))
   }
 
-  if (!sessionCookie) {
+  if (!sessionCookie && request.nextUrl.pathname !== '/') {
     return NextResponse.redirect(new URL('/', request.url))
   }
 

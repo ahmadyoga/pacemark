@@ -87,7 +87,7 @@ export default function StudioPage() {
         <div className="toolbar-sec">
           <div className="toolbar-eyebrow">METRICS TO SHOW</div>
           <div className="chip-row">
-            {(Object.keys(VISIBLE_LABELS) as (keyof VisibleMetrics)[]).map((k) => (
+            {(Object.keys(VISIBLE_LABELS) as (keyof typeof VISIBLE_LABELS)[]).map((k) => (
               <button
                 key={k}
                 className={`chip ${visible[k] ? 'is-on' : ''}`}

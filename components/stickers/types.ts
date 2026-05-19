@@ -9,6 +9,7 @@ export interface VisibleMetrics {
   elevation: boolean
   calories: boolean
   city: boolean
+  rounded?: boolean
 }
 
 export interface StickerProps {
@@ -24,7 +25,7 @@ export interface StickerDef {
   comp: ComponentType<StickerProps>
 }
 
-export const VISIBLE_LABELS: Record<keyof VisibleMetrics, string> = {
+export const VISIBLE_LABELS: Record<Exclude<keyof VisibleMetrics, 'rounded'>, string> = {
   distance: 'Distance',
   pace: 'Pace',
   duration: 'Duration',

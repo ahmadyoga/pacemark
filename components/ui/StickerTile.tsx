@@ -16,8 +16,10 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
   const captureRef = useRef<HTMLDivElement>(null)
   const [copyLabel, setCopyLabel] = useState('')
   const [saveState, setSaveState] = useState<'idle' | 'working' | 'done'>('idle')
+  const [rounded, setRounded] = useState(false)
 
   const Comp = def.comp
+  const hasRounding = def.id === 'glowsplits' || def.id === 'pacesplits'
 
   async function handleCopy() {
     if (!captureRef.current) return
@@ -58,12 +60,22 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
   return (
     <div className="tile">
       <div className="tile-head">
-        <div className="tile-name">{def.name}</div>
-        <div className="tile-desc">{def.desc}</div>
+        <div className="tile-name-wrap">
+          <div className="tile-name">{def.name}</div>
+          <div className="tile-desc">{def.desc}</div>
+        </div>
+        {hasRounding && (
+          <button
+            className={`tile-round-toggle ${rounded ? 'is-active' : ''}`}
+            onClick={() => setRounded(!rounded)}
+          >
+            Round
+          </button>
+        )}
       </div>
       <div className={`tile-stage tile-stage-${bg}`}>
         <div className="tile-stage-inner">
-          <Comp run={run} visible={visible} accent={accent} />
+          <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
         </div>
       </div>
       {/* Off-screen capture target: padding adds transparent border to exported PNG */}
@@ -78,7 +90,7 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
         aria-hidden="true"
       >
         <div ref={captureRef} style={{ width: 'fit-content', padding: 24 }}>
-          <Comp run={run} visible={visible} accent={accent} />
+          <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
         </div>
       </div>
       <div className="tile-actions">

@@ -27,4 +27,13 @@ describe('middleware', () => {
     const res = await middleware(makeRequest('/picker', true))
     expect(res.status).toBe(200)
   })
+
+  it('allows / through when no session cookie (prevents redirect loop)', async () => {
+    const res = await middleware(makeRequest('/'))
+    // Should NOT redirect to / if we are already at /
+    if (res.status === 307 || res.status === 308) {
+      expect(res.headers.get('location')).not.toBe('http://localhost:3000/')
+    }
+    expect(res.status).not.toBe(307)
+  })
 })

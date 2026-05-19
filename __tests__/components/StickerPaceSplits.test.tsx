@@ -8,9 +8,9 @@ const run: DisplayActivity = {
   heartRate: '142', elevation: '88', calories: '612',
   city: 'Jakarta', routeSeed: 3.1, fresh: true,
   splits: [
-    { km: 1, pace: '5:42', speed: 2.92 },
-    { km: 2, pace: '5:35', speed: 2.99 },
-    { km: 3, pace: '5:28', speed: 3.05 },
+    { km: 1, pace: '5:42', speed: 2.92, roundedKm: 1 },
+    { km: 2, pace: '5:35', speed: 2.99, roundedKm: 2 },
+    { km: 3, pace: '5:28', speed: 3.05, roundedKm: 3 },
   ],
 }
 
@@ -44,6 +44,7 @@ describe('StickerPaceSplits', () => {
       km: i + 1,
       pace: '5:30',
       speed: 3.03,
+      roundedKm: i + 1,
     }))
     render(<StickerPaceSplits run={{ ...run, splits: manySplits }} visible={visible} accent="#FF5A1F" />)
     const rows = document.querySelectorAll('.ovl-ps-row')

@@ -20,6 +20,9 @@ import { StickerStaggeredStrips } from './StickerStaggeredStrips'
 import { StickerTerminal } from './StickerTerminal'
 import { StickerVerticalRun } from './StickerVerticalRun'
 import { StickerGhostStats } from './StickerGhostStats'
+import { StickerRaceBib } from './StickerRaceBib'
+import { StickerEquation } from './StickerEquation'
+import { StickerHighlight } from './StickerHighlight'
 import type { StickerDef } from './types'
 
 export const STICKER_DEFS: StickerDef[] = [
@@ -43,4 +46,7 @@ export const STICKER_DEFS: StickerDef[] = [
   { id: 'terminal',       name: 'Terminal',         desc: 'CLI style',     comp: StickerTerminal },
   { id: 'vertrun',        name: 'Vertical Run',     desc: 'Stack numbers', comp: StickerVerticalRun },
   { id: 'ghost',          name: 'Ghost Stats',      desc: 'Frosted glow',  comp: StickerGhostStats },
+  { id: 'racebib',        name: 'Race Bib',         desc: 'Official bib',  comp: StickerRaceBib },
+  { id: 'equation',       name: 'Equation',         desc: 'Math formula',  comp: StickerEquation },
+  { id: 'highlight',      name: 'Highlight',        desc: 'Prose marks',   comp: StickerHighlight },
 ]

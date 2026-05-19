@@ -71,7 +71,7 @@ function LandingContent() {
         </div>
 
         <div className="landing-foot">
-          <span>v1.0 · made in Jakarta</span>
+          <span>v1.0 </span>
           <span className="landing-foot-dot">●</span>
           <span>privacy</span>
           <span className="landing-foot-dot">●</span>

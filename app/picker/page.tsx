@@ -9,13 +9,16 @@ const ACCENT = '#FF5A1F'
 export default function PickerPage() {
   const router = useRouter()
   const [runs, setRuns] = useState<DisplayActivity[]>([])
+  const [user, setUser] = useState<{ name: string; avatar: string } | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
   useEffect(() => {
-    fetch('/api/activities')
-      .then((res) => {
+    // Fetch user and activities in parallel
+    Promise.all([
+      fetch('/api/auth/me').then(res => res.ok ? res.json() : null),
+      fetch('/api/activities').then(res => {
         if (res.status === 401) {
           router.push('/')
           return null
@@ -23,13 +26,15 @@ export default function PickerPage() {
         if (!res.ok) throw new Error('fetch_failed')
         return res.json()
       })
-      .then((data: DisplayActivity[] | null) => {
-        if (data) {
-          setRuns(data)
-          if (data.length > 0) setSelectedId(data[0].id)
+    ])
+      .then(([userData, activityData]) => {
+        if (userData) setUser(userData)
+        if (activityData) {
+          setRuns(activityData)
+          if (activityData.length > 0) setSelectedId(activityData[0].id)
         }
       })
-      .catch(() => setError('Could not load activities. Strava may be down.'))
+      .catch(() => setError('Could not load data. Strava may be down.'))
       .finally(() => setLoading(false))
   }, [router])
 
@@ -44,9 +49,13 @@ export default function PickerPage() {
     <div className="screen screen-picker">
       <header className="picker-header">
         <div className="picker-user">
-          <div className="picker-avatar">PM</div>
+          {user?.avatar ? (
+            <img src={user.avatar} alt="" className="picker-avatar" style={{ objectFit: 'cover' }} />
+          ) : (
+            <div className="picker-avatar">{user?.name ? user.name[0].toUpperCase() : 'PM'}</div>
+          )}
           <div className="picker-user-meta">
-            <div className="picker-user-name">Pacemark Runner</div>
+            <div className="picker-user-name">{user?.name || 'Pacemark Runner'}</div>
             <div className="picker-user-sub">Connected</div>
           </div>
         </div>

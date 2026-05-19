@@ -33,7 +33,7 @@ export interface DisplayActivity {
   city: string
   routeSeed: number
   fresh: boolean
-  splits: { km: number; pace: string; speed: number }[]
+  splits: { km: number; pace: string; speed: number; roundedKm: number }[]
 }
 
 export function formatDuration(seconds: number): string {
@@ -60,29 +60,38 @@ export function formatDistance(meters: number): string {
   return (meters / 1000).toFixed(1)
 }
 
+const cityCache = new Map<string, string>()
+let resolveChain: Promise<unknown> = Promise.resolve()
+
 export async function resolveCity(lat: number, lon: number): Promise<string> {
-  try {
-    const res = await fetch(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=10`,
-      {
-        headers: {
-          'User-Agent': 'Pacemark/1.0 (contact@pacemark.app)',
-        },
-      }
-    )
-    if (!res.ok) return 'Unknown'
-    const data = await res.json()
-    return data.address?.city || data.address?.town || data.address?.village || data.address?.state || 'Unknown'
-  } catch (e) {
-    console.error('Failed to resolve city:', e)
-    return 'Unknown'
-  }
+  const cacheKey = `${lat.toFixed(2)},${lon.toFixed(2)}`
+  if (cityCache.has(cacheKey)) return cityCache.get(cacheKey)!
+
+  const result = await (resolveChain = resolveChain.then(async () => {
+    if (cityCache.has(cacheKey)) return cityCache.get(cacheKey)!
+
+    try {
+      const res = await fetch(
+        `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`
+      )
+      if (!res.ok) return 'Unknown'
+      const data = await res.json()
+      const city = data.city || data.locality || data.principalSubdivision || 'Unknown'
+      cityCache.set(cacheKey, city)
+      return city
+    } catch (e) {
+      console.error('Failed to resolve city:', e)
+      return 'Unknown'
+    }
+  }))
+
+  return result
 }
 
 export async function toDisplayActivity(a: ActivitySummary): Promise<DisplayActivity> {
   const date = new Date(a.start_date)
   let city = a.location_city || a.location_country || 'Unknown'
-  
+
   if ((!a.location_city || a.location_city === 'null') && a.start_latlng) {
     city = await resolveCity(a.start_latlng[0], a.start_latlng[1])
   }
@@ -105,6 +114,7 @@ export async function toDisplayActivity(a: ActivitySummary): Promise<DisplayActi
       km: i + 1,
       pace: formatPace(s.average_speed),
       speed: s.average_speed,
+      roundedKm: s.distance < 100 ? 0 : i + 1,
     })),
   }
 }

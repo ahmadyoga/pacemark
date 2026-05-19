@@ -31,34 +31,34 @@ const ACCENT_SWATCHES = [
 const Icon = {
   Bolt: (p) => (
     <svg viewBox="0 0 24 24" width={p.size || 18} height={p.size || 18} fill="currentColor" aria-hidden="true">
-      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z"/>
+      <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8z" />
     </svg>
   ),
   Check: (p) => (
     <svg viewBox="0 0 24 24" width={p.size || 16} height={p.size || 16} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M4 12.5 9.5 18 20 6.5"/>
+      <path d="M4 12.5 9.5 18 20 6.5" />
     </svg>
   ),
   ArrowLeft: (p) => (
     <svg viewBox="0 0 24 24" width={p.size || 18} height={p.size || 18} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M15 4 7 12l8 8"/>
+      <path d="M15 4 7 12l8 8" />
     </svg>
   ),
   Download: (p) => (
     <svg viewBox="0 0 24 24" width={p.size || 18} height={p.size || 18} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 4v12m-5-5 5 5 5-5M5 20h14"/>
+      <path d="M12 4v12m-5-5 5 5 5-5M5 20h14" />
     </svg>
   ),
   Copy: (p) => (
     <svg viewBox="0 0 24 24" width={p.size || 14} height={p.size || 14} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="8" y="8" width="12" height="12" rx="2"/>
-      <path d="M4 16V6a2 2 0 0 1 2-2h10"/>
+      <rect x="8" y="8" width="12" height="12" rx="2" />
+      <path d="M4 16V6a2 2 0 0 1 2-2h10" />
     </svg>
   ),
   Pin: (p) => (
     <svg viewBox="0 0 24 24" width={p.size || 14} height={p.size || 14} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 22s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z"/>
-      <circle cx="12" cy="10" r="2.5"/>
+      <path d="M12 22s7-7.2 7-12a7 7 0 1 0-14 0c0 4.8 7 12 7 12z" />
+      <circle cx="12" cy="10" r="2.5" />
     </svg>
   ),
 };
@@ -96,9 +96,9 @@ function ScreenLanding({ onConnect }) {
         <div className="landing-logo">
           <div className="landing-mark">
             <svg viewBox="0 0 32 32" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 22c4-2 6-10 10-10s4 8 8 8 6-2 6-2"/>
-              <circle cx="4" cy="22" r="1.4" fill="currentColor"/>
-              <circle cx="28" cy="18" r="1.4" fill="currentColor"/>
+              <path d="M4 22c4-2 6-10 10-10s4 8 8 8 6-2 6-2" />
+              <circle cx="4" cy="22" r="1.4" fill="currentColor" />
+              <circle cx="28" cy="18" r="1.4" fill="currentColor" />
             </svg>
           </div>
           <div className="landing-wordmark">pacemark</div>
@@ -115,20 +115,20 @@ function ScreenLanding({ onConnect }) {
             onClick={handleClick}
             disabled={connecting}
           >
-            <span className="landing-cta-icon"><Icon.Bolt size={20}/></span>
+            <span className="landing-cta-icon"><Icon.Bolt size={20} /></span>
             <span className="landing-cta-label">
               {connecting ? "Connecting…" : "Connect with Strava"}
             </span>
             <span className="landing-cta-spinner"></span>
           </button>
           <div className="landing-disclaimer">
-            We only read your activity data.<br/>
+            We only read your activity data.<br />
             We never post on your behalf.
           </div>
         </div>
 
         <div className="landing-foot">
-          <span>v0.4 · made in Jakarta</span>
+          <span>v0.4 · </span>
           <span className="landing-foot-dot">●</span>
           <span>privacy</span>
           <span className="landing-foot-dot">●</span>
@@ -200,14 +200,14 @@ function ScreenPicker({ onPick, onDisconnect, selectedId, setSelectedId }) {
                 </div>
 
                 <div className="runcard-foot">
-                  <span className="runcard-pin"><Icon.Pin size={11}/> {run.city}</span>
+                  <span className="runcard-pin"><Icon.Pin size={11} /> {run.city}</span>
                   <span className="runcard-hr">♥ {run.heartRate} bpm</span>
                   <span className="runcard-elev">↑ {run.elevation} m</span>
                 </div>
               </div>
 
               <div className={"runcard-check " + (active ? "is-active" : "")}>
-                {active && <Icon.Check size={14}/>}
+                {active && <Icon.Check size={14} />}
               </div>
             </button>
           );
@@ -254,7 +254,7 @@ function ScreenStudio({ onBack, run, tweaks, setTweak }) {
       {/* HEADER */}
       <header className="studio-head">
         <button className="studio-back" onClick={onBack}>
-          <Icon.ArrowLeft size={16}/> Activities
+          <Icon.ArrowLeft size={16} /> Activities
         </button>
         <div className="studio-runref">
           <div className="studio-runref-date">{run.date.toUpperCase()}</div>
@@ -299,7 +299,7 @@ function ScreenStudio({ onBack, run, tweaks, setTweak }) {
                   onClick={() => { setAccent(c); setTweak && setTweak({ accent: c }); }}
                   aria-label={c}
                 >
-                  {accent === c && <Icon.Check size={11}/>}
+                  {accent === c && <Icon.Check size={11} />}
                 </button>
               ))}
             </div>
@@ -382,8 +382,8 @@ function StickerTile({ def, run, visible, accent, bg }) {
           onClick={doCopy}
         >
           {copied
-            ? <><Icon.Check size={14}/> Copied</>
-            : <><Icon.Copy size={14}/> Copy</>}
+            ? <><Icon.Check size={14} /> Copied</>
+            : <><Icon.Copy size={14} /> Copy</>}
         </button>
         <button
           className={"tile-btn tile-btn-save " + (savingState !== "idle" ? "is-active" : "")}
@@ -392,8 +392,8 @@ function StickerTile({ def, run, visible, accent, bg }) {
           {savingState === "working"
             ? <><span className="tile-spinner"></span> Saving…</>
             : savingState === "done"
-            ? <><Icon.Check size={14}/> Saved</>
-            : <><Icon.Download size={14}/> PNG</>}
+              ? <><Icon.Check size={14} /> Saved</>
+              : <><Icon.Download size={14} /> PNG</>}
         </button>
       </div>
     </div>
@@ -481,4 +481,4 @@ function App() {
   );
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);

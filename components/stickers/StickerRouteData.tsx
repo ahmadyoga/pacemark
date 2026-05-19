@@ -1,14 +1,14 @@
 import { type StickerProps } from './types'
-import { RouteLine } from '@/components/ui/RouteLine'
+import { MapRoute } from './MapRoute'
 
 export function StickerRouteData({ run, accent }: StickerProps) {
   return (
     <div className="ovl ovl-routedata">
       <div className="ovl-rd-map">
-        <RouteLine
+        <MapRoute
           seed={run.routeSeed}
-          height={120}
           stroke={accent}
+          strokeWidth={2}
         />
       </div>
       <div className="ovl-rd-main">
@@ -33,3 +33,4 @@ export function StickerRouteData({ run, accent }: StickerProps) {
     </div>
   )
 }
+
