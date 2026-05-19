@@ -21,7 +21,12 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
 
   async function handleCopy() {
     if (!captureRef.current) return
-    const blob = await stickerToBlob(captureRef.current)
+    let blob: Blob
+    try {
+      blob = await stickerToBlob(captureRef.current)
+    } catch {
+      return
+    }
     try {
       await copyBlobToClipboard(blob)
       setCopyLabel('Copied')
