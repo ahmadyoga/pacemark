@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { getSession } from '@/lib/session'
 
 export async function GET() {
   const params = new URLSearchParams({
@@ -11,4 +12,10 @@ export async function GET() {
   return NextResponse.redirect(
     `https://www.strava.com/oauth/authorize?${params.toString()}`
   )
+}
+
+export async function DELETE() {
+  const session = await getSession()
+  session.destroy()
+  return NextResponse.json({ ok: true })
 }
