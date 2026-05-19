@@ -1048,3 +1048,87 @@ button:disabled { cursor: not-allowed; }
   text-align: center;
   padding: 12px 0;
 }
+
+/* ============================================================
+   STICKER — Thermal Receipt
+   ============================================================ */
+
+.ovl-receipt {
+  width: 200px;
+  background: #f5f0e8;
+  border-radius: 2px;
+  padding: 16px 14px 12px;
+  font-family: var(--font-mono);
+  color: #1a1a1a;
+  text-align: center;
+}
+.ovl-rcpt-header { margin-bottom: 8px; }
+.ovl-rcpt-brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #0a0a0a;
+}
+.ovl-rcpt-sub {
+  font-size: 7.5px;
+  letter-spacing: 0.08em;
+  color: rgba(0, 0, 0, 0.5);
+  margin-top: 2px;
+}
+.ovl-rcpt-divider {
+  border: none;
+  border-top: 1px dashed rgba(0, 0, 0, 0.25);
+  margin: 8px 0;
+}
+.ovl-rcpt-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #1a1a1a;
+  margin: 4px 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ovl-rcpt-rows { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.ovl-rcpt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.ovl-rcpt-key {
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  color: rgba(0, 0, 0, 0.55);
+  flex-shrink: 0;
+}
+.ovl-rcpt-val {
+  font-size: 9px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.ovl-rcpt-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  text-align: left;
+}
+.ovl-rcpt-score {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0a0a0a;
+}
+.ovl-rcpt-barcode-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 6px 0 4px;
+}
+.ovl-rcpt-foot {
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  color: rgba(0, 0, 0, 0.4);
+  margin-top: 4px;
+}
