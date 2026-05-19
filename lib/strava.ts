@@ -41,8 +41,10 @@ export function formatDuration(seconds: number): string {
 export function formatPace(metersPerSecond: number): string {
   if (metersPerSecond === 0) return '--:--'
   const secsPerKm = 1000 / metersPerSecond
-  const m = Math.floor(secsPerKm / 60)
-  const s = Math.round(secsPerKm % 60)
+  const rawS = Math.round(secsPerKm % 60)
+  const carry = rawS === 60 ? 1 : 0
+  const m = Math.floor(secsPerKm / 60) + carry
+  const s = carry ? 0 : rawS
   return `${m}:${String(s).padStart(2, '0')}`
 }
 
