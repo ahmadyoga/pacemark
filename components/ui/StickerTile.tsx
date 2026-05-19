@@ -60,7 +60,7 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
       </div>
       <div
         ref={captureRef}
-        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0 }}
+        style={{ position: 'fixed', left: -9999, top: -9999, pointerEvents: 'none' }}
         aria-hidden="true"
       >
         <Comp run={run} visible={visible} accent={accent} />
