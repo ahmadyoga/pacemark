@@ -39,7 +39,7 @@ describe('StickerPaceSplits', () => {
     expect(screen.getByText('No split data available')).toBeInTheDocument()
   })
 
-  it('shows at most 8 splits', () => {
+  it('renders all splits (no limit)', () => {
     const manySplits = Array.from({ length: 12 }, (_, i) => ({
       km: i + 1,
       pace: '5:30',
@@ -48,6 +48,6 @@ describe('StickerPaceSplits', () => {
     }))
     render(<StickerPaceSplits run={{ ...run, splits: manySplits }} visible={visible} accent="#FF5A1F" />)
     const rows = document.querySelectorAll('.ovl-ps-row')
-    expect(rows).toHaveLength(8)
+    expect(rows).toHaveLength(12)
   })
 })

@@ -1,13 +1,20 @@
 import { type StickerProps } from './types'
+import { accentFg } from './accentFg'
 
 export function StickerRaceBib({ run, visible, accent }: StickerProps) {
+  const fg = accentFg(accent)
   // Use last 4 digits of run id so it always fits the bib layout
   const bib = String(run.id % 10000).padStart(4, '0')
+  // When accent is very light (e.g. white), add a subtle outline so bars remain visible
+  const barStyle = {
+    background: accent,
+    ...(fg === '#000' ? { boxShadow: '0 0 0 1px rgba(0,0,0,0.15)' } : {}),
+  }
 
   return (
     <div className="ovl ovl-bib">
       {/* Top color bar */}
-      <div className="ovl-bib-bar" style={{ background: accent }} />
+      <div className="ovl-bib-bar" style={barStyle} />
 
       <div className="ovl-bib-body">
         {/* Header row */}
@@ -17,7 +24,7 @@ export function StickerRaceBib({ run, visible, accent }: StickerProps) {
         </div>
 
         {/* Big bib number */}
-        <div className="ovl-bib-number" style={{ color: accent }}>
+        <div className="ovl-bib-number" style={{ color: accent, ...(fg === '#000' ? { WebkitTextStroke: '1px rgba(0,0,0,0.15)' } : {}) }}>
           {bib}
         </div>
 
@@ -62,7 +69,7 @@ export function StickerRaceBib({ run, visible, accent }: StickerProps) {
       </div>
 
       {/* Bottom bar */}
-      <div className="ovl-bib-bar" style={{ background: accent }} />
+      <div className="ovl-bib-bar" style={barStyle} />
     </div>
   )
 }

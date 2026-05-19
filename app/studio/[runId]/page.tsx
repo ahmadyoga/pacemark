@@ -5,9 +5,18 @@ import { StickerTile } from '@/components/ui/StickerTile'
 import { STICKER_DEFS, VISIBLE_LABELS, type VisibleMetrics } from '@/components/stickers'
 import type { DisplayActivity } from '@/lib/strava'
 
-const ACCENT_SWATCHES = ['#FF5A1F', '#22D3A0', '#9B5CFF', '#FFC83D', '#3B82F6', '#F472B6']
+const ACCENT_SWATCHES = ['#FF5A1F', '#22D3A0', '#9B5CFF', '#FFC83D', '#3B82F6', '#F472B6', '#FFFFFF']
 
-function CheckIcon({ size = 11 }: { size?: number }) {
+function isLight(hex: string) {
+  const h = hex.replace('#', '')
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0')
+  const n = parseInt(x.slice(0, 6), 16)
+  if (Number.isNaN(n)) return true
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255
+  return r * 299 + g * 587 + b * 114 > 148000
+}
+
+function CheckIcon({ size = 11, light = false }: { size?: number, light?: boolean }) {
   return (
     <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
       <path d="M4 12.5 9.5 18 20 6.5" />
@@ -108,7 +117,7 @@ export default function StudioPage() {
                 <button
                   key={c}
                   className={`swatch ${accent === c ? 'is-active' : ''}`}
-                  style={{ background: c }}
+                  style={{ background: c, color: isLight(c) ? 'rgba(0,0,0,0.8)' : '#fff' }}
                   onClick={() => setAccent(c)}
                   aria-label={c}
                 >

@@ -2,7 +2,7 @@ import { type StickerProps } from './types'
 
 export function StickerGlowSplits({ run, visible, accent }: StickerProps) {
   const useRounded = !!visible.rounded
-  const splits = (useRounded ? run.splits.filter((s) => s.roundedKm > 0) : run.splits).slice(0, 8)
+  const splits = useRounded ? run.splits.filter((s) => s.roundedKm > 0) : run.splits
   const maxSpeed = Math.max(...splits.map((s) => s.speed), 0.001)
   const minSpeed = Math.min(...splits.map((s) => s.speed), maxSpeed)
   const range = maxSpeed - minSpeed || 1
@@ -22,7 +22,7 @@ export function StickerGlowSplits({ run, visible, accent }: StickerProps) {
         const opacity = 0.18 + ratio * 0.82
         const width = 28 + ratio * 62
         const glow = ratio > 0.65 ? `0 0 ${ratio * 14}px ${accent}88` : 'none'
-        const kmDisplay = useRounded ? s.roundedKm : s.km
+        const kmDisplay = !useRounded ? s.km : s.roundedKm
 
         return (
           <div key={s.km} className="ovl-gs-row">

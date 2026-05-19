@@ -3,7 +3,7 @@ import html2canvas from 'html2canvas'
 export async function stickerToBlob(element: HTMLElement): Promise<Blob> {
   const { width, height } = element.getBoundingClientRect()
   const canvas = await html2canvas(element, {
-    scale: 2,
+    scale: 4,
     backgroundColor: null,
     useCORS: true,
     logging: false,

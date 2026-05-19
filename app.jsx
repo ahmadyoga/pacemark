@@ -22,8 +22,17 @@ const RUNS = [
 ];
 
 const ACCENT_SWATCHES = [
-  "#FF5A1F", "#22D3A0", "#9B5CFF", "#FFC83D", "#3B82F6", "#F472B6",
+  "#FF5A1F", "#22D3A0", "#9B5CFF", "#FFC83D", "#3B82F6", "#F472B6", "#FFFFFF",
 ];
+
+function isLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
 
 // ----------------------------------------------------------------------------
 // Tiny SVG glyphs
@@ -295,7 +304,7 @@ function ScreenStudio({ onBack, run, tweaks, setTweak }) {
                 <button
                   key={c}
                   className={"swatch " + (accent === c ? "is-active" : "")}
-                  style={{ background: c }}
+                  style={{ background: c, color: isLight(c) ? "rgba(0,0,0,0.8)" : "#fff" }}
                   onClick={() => { setAccent(c); setTweak && setTweak({ accent: c }); }}
                   aria-label={c}
                 >

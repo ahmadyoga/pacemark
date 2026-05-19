@@ -15,6 +15,14 @@ const VISIBLE_LABELS = {
 };
 
 // Helpers ---------------------------------------------------------------
+function isLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
 function statList(run, visible) {
   const arr = [];
   if (visible.distance) arr.push(["DIST", run.distance + " km"]);
@@ -34,7 +42,7 @@ function RouteLine({ seed = 1, stroke = "currentColor", strokeWidth = 2, opacity
     const wob = Math.sin(t * 6 + seed) * 12 + Math.cos(t * 9 + seed * 1.3) * 5;
     const x = 6 + t * 88;
     const y = 50 + wob;
-    points.push(x.toFixed(1) + "," + y.toFixed(1));
+    points.push(x.toFixed(2) + "," + y.toFixed(2));
   }
   return (
     <svg viewBox="0 0 100 100" preserveAspectRatio="none" style={{ width: "100%", height, display: "block", opacity }}>
@@ -51,7 +59,7 @@ function RouteLine({ seed = 1, stroke = "currentColor", strokeWidth = 2, opacity
 function StickerBigNumber({ run, visible, accent }) {
   const stats = statList(run, visible).filter(s => s[0] !== "DIST");
   return (
-    <div className="ovl ovl-bignum" style={{ ["--accent"]: accent }}>
+    <div className="ovl ovl-bignum" style={{ "--accent": accent, "--accent-fg": isLight(accent) ? "#000" : "#fff" }}>
       <div className="ovl-bignum-lbl">DISTANCE</div>
       <div className="ovl-bignum-val">{run.distance}</div>
       <div className="ovl-bignum-unit">KILOMETERS</div>
@@ -81,7 +89,7 @@ function StickerBoldCaps({ run, visible, accent }) {
   if (order.length === 0) order.push(["KM", run.distance, "KM"]);
 
   return (
-    <div className="ovl ovl-boldcaps" style={{ ["--accent"]: accent }}>
+    <div className="ovl ovl-boldcaps" style={{ "--accent": accent, "--accent-fg": isLight(accent) ? "#000" : "#fff" }}>
       {order.slice(0, 3).map((col, i) => (
         <div className="ovl-bc-col" key={col[0] + i}>
           <div className="ovl-bc-v">{col[1]}</div>
@@ -98,7 +106,7 @@ function StickerBoldCaps({ run, visible, accent }) {
 function StickerMonoBlock({ run, visible, accent }) {
   const stats = statList(run, visible);
   return (
-    <div className="ovl ovl-mono" style={{ ["--accent"]: accent }}>
+    <div className="ovl ovl-mono" style={{ "--accent": accent, "--accent-fg": isLight(accent) ? "#000" : "#fff" }}>
       <div className="ovl-mono-head">
         <span className="ovl-mono-dot" />
         <span>{run.date} · {visible.city ? run.city.toUpperCase() : "RUN"}</span>
@@ -121,7 +129,7 @@ function StickerMonoBlock({ run, visible, accent }) {
 // ============================================================
 function StickerSerif({ run, visible, accent }) {
   return (
-    <div className="ovl ovl-serif" style={{ ["--accent"]: accent }}>
+    <div className="ovl ovl-serif" style={{ "--accent": accent, "--accent-fg": isLight(accent) ? "#000" : "#fff" }}>
       <div className="ovl-serif-cap">a quiet<br/>morning run.</div>
       <div className="ovl-serif-stats">
         {visible.distance && <span><b>{run.distance}</b> km</span>}
@@ -139,7 +147,7 @@ function StickerSerif({ run, visible, accent }) {
 // ============================================================
 function StickerCapsule({ run, visible, accent }) {
   return (
-    <div className="ovl ovl-capsule" style={{ ["--accent"]: accent }}>
+    <div className="ovl ovl-capsule" style={{ "--accent": accent, "--accent-fg": isLight(accent) ? "#000" : "#fff" }}>
       <div className="ovl-cap-pill">
         <span className="ovl-cap-pin">●</span>
         <span className="ovl-cap-txt">{visible.city ? run.city.toUpperCase() : "RUN"}</span>
@@ -164,7 +172,7 @@ function StickerChat({ run, visible, accent }) {
   ].filter(Boolean).join(" · ");
 
   return (
-    <div className="ovl ovl-chat" style={{ ["--accent"]: accent }}>
+    <div className="ovl ovl-chat" style={{ "--accent": accent, "--accent-fg": isLight(accent) ? "#000" : "#fff" }}>
       <div className="ovl-chat-bubble">
         <div className="ovl-chat-msg">{headline}</div>
         {sub && <div className="ovl-chat-sub">{sub}</div>}

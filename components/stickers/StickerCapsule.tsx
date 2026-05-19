@@ -1,9 +1,11 @@
 'use client'
 import type { StickerProps } from './types'
+import { accentFg } from './accentFg'
 
 export function StickerCapsule({ run, visible, accent }: StickerProps) {
+  const fg = accentFg(accent)
   return (
-    <div className="ovl ovl-capsule" style={{ ['--accent' as string]: accent }}>
+    <div className="ovl ovl-capsule" style={{ ['--accent' as string]: accent, ['--accent-fg' as string]: fg }}>
       <div className="ovl-cap-pill">
         <span className="ovl-cap-pin" />
         <span className="ovl-cap-txt">{visible.city ? run.city.toUpperCase() : 'RUN'}</span>

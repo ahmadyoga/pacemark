@@ -1,7 +1,9 @@
 import { type StickerProps } from './types'
 import { MapRoute } from './MapRoute'
+import { accentFg } from './accentFg'
 
 export function StickerRouteData({ run, accent }: StickerProps) {
+  const fg = accentFg(accent)
   return (
     <div className="ovl ovl-routedata">
       <div className="ovl-rd-map">
@@ -27,7 +29,7 @@ export function StickerRouteData({ run, accent }: StickerProps) {
           </div>
         </div>
       </div>
-      <div className="ovl-rd-foot" style={{ backgroundColor: accent }}>
+      <div className="ovl-rd-foot" style={{ backgroundColor: accent, color: fg }}>
         {run.city.toUpperCase()} · {run.title.toUpperCase()}
       </div>
     </div>

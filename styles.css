@@ -836,7 +836,7 @@ input, select { font: inherit; color: inherit; }
 .ovl-cap-pill {
   display: inline-flex; align-items: center; gap: 8px;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-fg, #fff);
   padding: 7px 14px 7px 12px;
   border-radius: 999px;
   font-family: 'Inter', sans-serif;
@@ -848,7 +848,7 @@ input, select { font: inherit; color: inherit; }
 }
 .ovl-cap-pin {
   width: 9px; height: 9px;
-  background: #fff;
+  background: var(--accent-fg, #fff);
   border-radius: 50%;
   display: inline-block;
   font-size: 0;
@@ -856,7 +856,8 @@ input, select { font: inherit; color: inherit; }
 .ovl-cap-txt { line-height: 1; }
 .ovl-cap-div {
   width: 1px; height: 12px;
-  background: rgba(255,255,255,0.5);
+  background: var(--accent-fg, #fff);
+  opacity: 0.5;
 }
 .ovl-cap-num {
   font-family: 'Inter Tight', sans-serif;
@@ -892,7 +893,7 @@ input, select { font: inherit; color: inherit; }
 .ovl-chat-bubble {
   position: relative;
   background: var(--accent);
-  color: #fff;
+  color: var(--accent-fg, #fff);
   padding: 12px 14px 13px;
   border-radius: 18px 18px 18px 4px;
   margin-bottom: 8px;

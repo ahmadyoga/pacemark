@@ -1,6 +1,8 @@
 import { type StickerProps } from './types'
+import { accentFg } from './accentFg'
 
 export function StickerStaggeredStrips({ run, accent }: StickerProps) {
+  const fg = accentFg(accent)
   const strips = [
     { label: 'DISTANCE', value: run.distance, unit: 'KM',  widthPct: 68 },
     { label: 'TIME',     value: run.duration,  unit: '',    widthPct: 84 },
@@ -13,7 +15,7 @@ export function StickerStaggeredStrips({ run, accent }: StickerProps) {
         <div key={s.label} className="ovl-strip-row">
           <div
             className="ovl-strip"
-            style={{ width: `${s.widthPct}%`, backgroundColor: accent }}
+            style={{ width: `${s.widthPct}%`, backgroundColor: accent, color: fg }}
           >
             <span className="ovl-strip-lbl">{s.label}</span>
             <span className="ovl-strip-rhs">

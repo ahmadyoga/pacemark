@@ -45,14 +45,14 @@ function buildPath(seed: number): string {
   ])
 
   // Build a smooth path using mid-point quadratic beziers
-  const d: string[] = [`M ${norm[0][0].toFixed(1)},${norm[0][1].toFixed(1)}`]
+  const d: string[] = [`M ${norm[0][0].toFixed(2)},${norm[0][1].toFixed(2)}`]
   for (let i = 1; i < norm.length - 1; i++) {
-    const mx = ((norm[i][0] + norm[i + 1][0]) / 2).toFixed(1)
-    const my = ((norm[i][1] + norm[i + 1][1]) / 2).toFixed(1)
-    d.push(`Q ${norm[i][0].toFixed(1)},${norm[i][1].toFixed(1)} ${mx},${my}`)
+    const mx = ((norm[i][0] + norm[i + 1][0]) / 2).toFixed(2)
+    const my = ((norm[i][1] + norm[i + 1][1]) / 2).toFixed(2)
+    d.push(`Q ${norm[i][0].toFixed(2)},${norm[i][1].toFixed(2)} ${mx},${my}`)
   }
   const last = norm[norm.length - 1]
-  d.push(`L ${last[0].toFixed(1)},${last[1].toFixed(1)}`)
+  d.push(`L ${last[0].toFixed(2)},${last[1].toFixed(2)}`)
 
   return d.join(' ')
 }

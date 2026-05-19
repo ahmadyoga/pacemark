@@ -2,7 +2,7 @@ import { type StickerProps } from './types'
 
 export function StickerPaceSplits({ run, visible, accent }: StickerProps) {
   const useRounded = !!visible.rounded
-  const splits = (useRounded ? run.splits.filter((s) => s.roundedKm > 0) : run.splits).slice(0, 8)
+  const splits = useRounded ? run.splits.filter((s) => s.roundedKm > 0) : run.splits
   const maxSpeed = Math.max(...splits.map((s) => s.speed), 0.001)
 
   if (splits.length === 0) {
