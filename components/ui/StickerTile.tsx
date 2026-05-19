@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useState } from 'react'
-import { stickerToBlob, downloadBlob, copyBlobToClipboard } from '@/lib/export'
+import { stickerToBlob, downloadBlob, copyBlobToClipboard, shareBlobFile } from '@/lib/export'
 import type { DisplayActivity } from '@/lib/strava'
 import type { StickerDef, VisibleMetrics } from '@/components/stickers'
 
@@ -14,24 +14,32 @@ interface StickerTileProps {
 
 export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps) {
   const captureRef = useRef<HTMLDivElement>(null)
-  const [copied, setCopied] = useState(false)
+  const [copyLabel, setCopyLabel] = useState('')
   const [saveState, setSaveState] = useState<'idle' | 'working' | 'done'>('idle')
 
   const Comp = def.comp
 
   async function handleCopy() {
     if (!captureRef.current) return
+    let blob: Blob
     try {
-      const blob = await stickerToBlob(captureRef.current)
-      await copyBlobToClipboard(blob)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 1800)
+      blob = await stickerToBlob(captureRef.current)
     } catch {
-      if (captureRef.current) {
-        const blob = await stickerToBlob(captureRef.current)
+      return
+    }
+    try {
+      await copyBlobToClipboard(blob)
+      setCopyLabel('Copied')
+    } catch {
+      try {
+        await shareBlobFile(blob)
+        setCopyLabel('Shared')
+      } catch {
         downloadBlob(blob)
+        setCopyLabel('Saved')
       }
     }
+    setTimeout(() => setCopyLabel(''), 1800)
   }
 
   async function handleSave() {
@@ -58,28 +66,27 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
           <Comp run={run} visible={visible} accent={accent} />
         </div>
       </div>
-      {/* Hidden capture target — fixed width wrapper to ensure layout matches preview */}
+      {/* Off-screen capture target: padding adds transparent border to exported PNG */}
       <div
-        style={{ 
-          position: 'fixed', 
-          left: -9999, 
-          top: -9999, 
+        style={{
+          position: 'fixed',
+          left: -9999,
+          top: -9999,
           pointerEvents: 'none',
-          width: 'fit-content',
-          display: 'block'
+          display: 'block',
         }}
         aria-hidden="true"
       >
-        <div ref={captureRef} style={{ width: 'fit-content' }}>
+        <div ref={captureRef} style={{ width: 'fit-content', padding: 24 }}>
           <Comp run={run} visible={visible} accent={accent} />
         </div>
       </div>
       <div className="tile-actions">
         <button
-          className={`tile-btn tile-btn-copy ${copied ? 'is-done' : ''}`}
+          className={`tile-btn tile-btn-copy ${copyLabel ? 'is-done' : ''}`}
           onClick={handleCopy}
         >
-          {copied ? 'Copied' : 'Copy'}
+          {copyLabel || 'Copy'}
         </button>
         <button
           className={`tile-btn tile-btn-save ${saveState !== 'idle' ? 'is-active' : ''}`}

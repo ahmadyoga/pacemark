@@ -989,3 +989,146 @@ button:disabled { cursor: not-allowed; }
 .ovl-rd-rk { font-size: 7px; opacity: 0.6; font-weight: 700; }
 .ovl-rd-rv { font-size: 13px; font-weight: 800; }
 .ovl-rd-foot { padding: 8px 16px; font-size: 9px; font-weight: 800; color: #000; text-align: center; letter-spacing: 0.05em; }
+
+/* ============================================================
+   STICKER — Pace Splits Bar
+   ============================================================ */
+
+.ovl-pacesplits {
+  width: 220px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 12px;
+}
+.ovl-ps-header {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  margin-bottom: 12px;
+}
+.ovl-ps-rows { display: flex; flex-direction: column; gap: 8px; }
+.ovl-ps-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.ovl-ps-km {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  width: 12px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.ovl-ps-bar-track {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.ovl-ps-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+}
+.ovl-ps-pace {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  width: 38px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.ovl-ps-empty {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.4);
+  text-align: center;
+  padding: 12px 0;
+}
+
+/* ============================================================
+   STICKER — Thermal Receipt
+   ============================================================ */
+
+.ovl-receipt {
+  width: 200px;
+  background: #f5f0e8;
+  border-radius: 2px;
+  padding: 16px 14px 12px;
+  font-family: var(--font-mono);
+  color: #1a1a1a;
+  text-align: center;
+}
+.ovl-rcpt-header { margin-bottom: 8px; }
+.ovl-rcpt-brand {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: #0a0a0a;
+}
+.ovl-rcpt-sub {
+  font-size: 7.5px;
+  letter-spacing: 0.08em;
+  color: rgba(0, 0, 0, 0.5);
+  margin-top: 2px;
+}
+.ovl-rcpt-divider {
+  border: none;
+  border-top: 1px dashed rgba(0, 0, 0, 0.25);
+  margin: 8px 0;
+}
+.ovl-rcpt-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #1a1a1a;
+  margin: 4px 0;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.ovl-rcpt-rows { display: flex; flex-direction: column; gap: 4px; text-align: left; }
+.ovl-rcpt-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+.ovl-rcpt-key {
+  font-size: 8px;
+  letter-spacing: 0.06em;
+  color: rgba(0, 0, 0, 0.55);
+  flex-shrink: 0;
+}
+.ovl-rcpt-val {
+  font-size: 9px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+.ovl-rcpt-score-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  text-align: left;
+}
+.ovl-rcpt-score {
+  font-size: 10px;
+  font-weight: 700;
+  color: #0a0a0a;
+}
+.ovl-rcpt-barcode-wrap {
+  display: flex;
+  justify-content: center;
+  margin: 6px 0 4px;
+}
+.ovl-rcpt-foot {
+  font-size: 7px;
+  letter-spacing: 0.1em;
+  color: rgba(0, 0, 0, 0.4);
+  margin-top: 4px;
+}
