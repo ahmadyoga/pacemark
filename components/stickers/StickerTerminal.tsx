@@ -9,21 +9,18 @@ export function StickerTerminal({ run, accent }: StickerProps) {
   ]
 
   return (
-    <div className="ovl-terminal">
-      <div className="ovl-term-accent" style={{ backgroundColor: accent }} />
-      <div className="ovl-term-body">
-        <div className="ovl-term-cmd">
-          <span className="ovl-term-prompt" style={{ color: accent }}>$</span>
-          {' run_stats --latest'}
-        </div>
-        <div className="ovl-term-rows">
-          {rows.map(([k, v]) => (
-            <div key={k} className="ovl-term-row">
-              <span className="ovl-term-k">{k}</span>
-              <span className="ovl-term-v">{v}</span>
-            </div>
-          ))}
-        </div>
+    <div className="ovl-terminal" style={{ borderLeftColor: accent }}>
+      <div className="ovl-term-cmd">
+        <span className="ovl-term-prompt" style={{ color: accent }}>$</span>
+        {' run_stats --latest'}
+      </div>
+      <div className="ovl-term-rows">
+        {rows.map(([k, v]) => (
+          <div key={k} className="ovl-term-row">
+            <span className="ovl-term-k">{k}</span>
+            <span className="ovl-term-v">{v}</span>
+          </div>
+        ))}
       </div>
     </div>
   )
