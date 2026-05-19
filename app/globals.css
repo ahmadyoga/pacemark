@@ -1,26 +1,62 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=Archivo+Black&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap');
+
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #0a0a0b;
+  --bg-2: #111114;
+  --surface: #16161a;
+  --surface-2: #1c1c22;
+  --line: #26262e;
+  --line-2: #34343e;
+  --text: #f5f4f1;
+  --text-mute: #a1a1aa;
+  --text-dim: #6b6b75;
+  --accent: #ff5a1f;
+  --strava: #FC4C02;
+  --good: #22d3a0;
+
+  --font-ui: 'Inter', 'Helvetica Neue', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: 'Inter Tight', 'Inter', sans-serif;
+  --font-serif: 'Instrument Serif', Georgia, serif;
+
+  --r-sm: 8px;
+  --r-md: 12px;
+  --r-lg: 18px;
+  --r-xl: 28px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Colors */
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-foreground: var(--text);
+  --color-muted: var(--text-mute);
+  --color-dim: var(--text-dim);
+  --color-accent: var(--accent);
+  --color-strava: var(--strava);
+  --color-good: var(--good);
+
+  /* Font families */
+  --font-family-ui: var(--font-ui);
+  --font-family-mono: var(--font-mono);
+  --font-family-display: var(--font-display);
+  --font-family-serif: var(--font-serif);
+
+  /* Border radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 28px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: var(--font-ui); -webkit-font-smoothing: antialiased; min-height: 100vh; }
+body { overflow-x: hidden; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; padding: 0; }
+button:disabled { cursor: not-allowed; }
