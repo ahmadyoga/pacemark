@@ -70,4 +70,25 @@ describe('toDisplayActivity', () => {
     const display = await toDisplayActivity({ ...base, average_heartrate: undefined })
     expect(display.heartRate).toBe('--')
   })
+
+  it('maps splits_metric to splits array', async () => {
+    const withSplits: ActivitySummary = {
+      ...base,
+      splits_metric: [
+        { distance: 1000, moving_time: 342, average_speed: 2.92, pace_zone: 2 },
+        { distance: 1000, moving_time: 335, average_speed: 2.99, pace_zone: 2 },
+      ],
+    }
+    const display = await toDisplayActivity(withSplits)
+    expect(display.splits).toHaveLength(2)
+    expect(display.splits[0].km).toBe(1)
+    expect(display.splits[1].km).toBe(2)
+    expect(display.splits[0].pace).toBe(formatPace(2.92))
+    expect(display.splits[0].speed).toBe(2.92)
+  })
+
+  it('sets splits to [] when splits_metric is absent', async () => {
+    const display = await toDisplayActivity(base)
+    expect(display.splits).toEqual([])
+  })
 })
