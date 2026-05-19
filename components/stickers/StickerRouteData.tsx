@@ -5,12 +5,10 @@ export function StickerRouteData({ run, accent }: StickerProps) {
   return (
     <div className="ovl ovl-routedata">
       <div className="ovl-rd-map">
-        <RouteLine 
-          width={220} 
-          height={120} 
-          points={run.route} 
-          stroke={accent} 
-          glow 
+        <RouteLine
+          seed={run.routeSeed}
+          height={120}
+          stroke={accent}
         />
       </div>
       <div className="ovl-rd-main">
