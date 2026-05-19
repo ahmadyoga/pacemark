@@ -68,12 +68,13 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
   font-family: var(--font-ui);
   color: #fff;
   text-align: left;
-  display: inline-block;
+  display: block;
+  width: fit-content;
 }
 
 .ovl-bignum {
   text-align: center;
-  width: 200px;
+  width: 220px;
   font-family: 'Inter Tight', 'Inter', sans-serif;
 }
 .ovl-bignum-lbl {
@@ -118,9 +119,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 .ovl-boldcaps {
   display: flex; align-items: flex-end;
-  gap: 10px;
+  gap: 12px;
   font-family: 'Archivo Black', 'Archivo', sans-serif;
   color: #fff;
+  width: fit-content;
 }
 .ovl-bc-col {
   display: flex; flex-direction: column;
