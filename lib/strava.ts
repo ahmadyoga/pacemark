@@ -100,6 +100,7 @@ export async function toDisplayActivity(a: ActivitySummary): Promise<DisplayActi
     city,
     routeSeed: (a.id % 10) + 0.1,
     fresh: Date.now() - date.getTime() < 7 * 24 * 60 * 60 * 1000,
+    // Strava guarantees splits_metric is ordered km 1..n
     splits: (a.splits_metric ?? []).map((s, i) => ({
       km: i + 1,
       pace: formatPace(s.average_speed),
