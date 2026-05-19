@@ -1,4 +1,4 @@
-import { downloadBlob } from '@/lib/export'
+import { downloadBlob, shareBlobFile } from '@/lib/export'
 
 describe('downloadBlob', () => {
   it('creates an object URL and triggers anchor click', () => {
@@ -19,5 +19,26 @@ describe('downloadBlob', () => {
     expect(mockAnchor.download).toBe('test.png')
     expect(mockClick).toHaveBeenCalled()
     expect(mockRevoke).toHaveBeenCalledWith(mockUrl)
+  })
+})
+
+describe('shareBlobFile', () => {
+  it('calls navigator.share with a File containing the blob', async () => {
+    const blob = new Blob(['fake-png'], { type: 'image/png' })
+    const mockShare = jest.fn().mockResolvedValue(undefined)
+    Object.defineProperty(global.navigator, 'share', {
+      value: mockShare,
+      writable: true,
+      configurable: true,
+    })
+
+    await shareBlobFile(blob)
+
+    expect(mockShare).toHaveBeenCalledWith({
+      files: [expect.any(File)],
+    })
+    const file: File = mockShare.mock.calls[0][0].files[0]
+    expect(file.name).toBe('pacemark-sticker.png')
+    expect(file.type).toBe('image/png')
   })
 })

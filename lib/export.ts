@@ -39,3 +39,8 @@ export function downloadBlob(blob: Blob, filename = 'pacemark-sticker.png'): voi
 export async function copyBlobToClipboard(blob: Blob): Promise<void> {
   await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
 }
+
+export async function shareBlobFile(blob: Blob): Promise<void> {
+  const file = new File([blob], 'pacemark-sticker.png', { type: 'image/png' })
+  await navigator.share({ files: [file] })
+}
