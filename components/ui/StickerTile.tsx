@@ -58,12 +58,21 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
           <Comp run={run} visible={visible} accent={accent} />
         </div>
       </div>
+      {/* Hidden capture target — fixed width wrapper to ensure layout matches preview */}
       <div
-        ref={captureRef}
-        style={{ position: 'absolute', opacity: 0, pointerEvents: 'none', top: 0, left: 0 }}
+        style={{ 
+          position: 'fixed', 
+          left: -9999, 
+          top: -9999, 
+          pointerEvents: 'none',
+          width: 'fit-content',
+          display: 'block'
+        }}
         aria-hidden="true"
       >
-        <Comp run={run} visible={visible} accent={accent} />
+        <div ref={captureRef} style={{ width: 'fit-content' }}>
+          <Comp run={run} visible={visible} accent={accent} />
+        </div>
       </div>
       <div className="tile-actions">
         <button

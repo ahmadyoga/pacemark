@@ -11,6 +11,7 @@ export interface ActivitySummary {
   kilojoules?: number
   location_city?: string
   location_country?: string
+  start_latlng?: [number, number]
 }
 
 export interface DisplayActivity {
@@ -52,8 +53,33 @@ export function formatDistance(meters: number): string {
   return (meters / 1000).toFixed(1)
 }
 
-export function toDisplayActivity(a: ActivitySummary): DisplayActivity {
+export async function resolveCity(lat: number, lon: number): Promise<string> {
+  try {
+    const res = await fetch(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lon}&zoom=10`,
+      {
+        headers: {
+          'User-Agent': 'Pacemark/1.0 (contact@pacemark.app)',
+        },
+      }
+    )
+    if (!res.ok) return 'Unknown'
+    const data = await res.json()
+    return data.address?.city || data.address?.town || data.address?.village || data.address?.state || 'Unknown'
+  } catch (e) {
+    console.error('Failed to resolve city:', e)
+    return 'Unknown'
+  }
+}
+
+export async function toDisplayActivity(a: ActivitySummary): Promise<DisplayActivity> {
   const date = new Date(a.start_date)
+  let city = a.location_city || a.location_country || 'Unknown'
+  
+  if ((!a.location_city || a.location_city === 'null') && a.start_latlng) {
+    city = await resolveCity(a.start_latlng[0], a.start_latlng[1])
+  }
+
   return {
     id: a.id,
     title: a.name,
@@ -64,7 +90,7 @@ export function toDisplayActivity(a: ActivitySummary): DisplayActivity {
     heartRate: a.average_heartrate ? String(Math.round(a.average_heartrate)) : '--',
     elevation: String(Math.round(a.total_elevation_gain)),
     calories: a.kilojoules ? String(Math.round(a.kilojoules)) : '--',
-    city: a.location_city || a.location_country || 'Unknown',
+    city,
     routeSeed: (a.id % 10) + 0.1,
     fresh: Date.now() - date.getTime() < 7 * 24 * 60 * 60 * 1000,
   }

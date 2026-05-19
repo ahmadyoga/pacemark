@@ -27,7 +27,10 @@ export async function GET() {
 
   try {
     const activities = await getActivitiesFromStrava(session.access_token)
-    return NextResponse.json(activities.map(toDisplayActivity))
+    const displayActivities = await Promise.all(
+      activities.map((a) => toDisplayActivity(a))
+    )
+    return NextResponse.json(displayActivities)
   } catch {
     return NextResponse.json({ error: 'strava_error' }, { status: 502 })
   }

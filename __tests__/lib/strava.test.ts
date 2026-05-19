@@ -50,19 +50,24 @@ describe('toDisplayActivity', () => {
     kilojoules: 612,
   }
 
-  it('formats distance', () => {
-    expect(toDisplayActivity(base).distance).toBe('10.2')
+  it('formats distance', async () => {
+    const display = await toDisplayActivity(base)
+    expect(display.distance).toBe('10.2')
   })
-  it('formats duration', () => {
-    expect(toDisplayActivity(base).duration).toBe('54:12')
+  it('formats duration', async () => {
+    const display = await toDisplayActivity(base)
+    expect(display.duration).toBe('54:12')
   })
-  it('formats heartRate', () => {
-    expect(toDisplayActivity(base).heartRate).toBe('142')
+  it('formats heartRate', async () => {
+    const display = await toDisplayActivity(base)
+    expect(display.heartRate).toBe('142')
   })
-  it('formats elevation', () => {
-    expect(toDisplayActivity(base).elevation).toBe('88')
+  it('formats elevation', async () => {
+    const display = await toDisplayActivity(base)
+    expect(display.elevation).toBe('88')
   })
-  it('uses -- when heartRate is missing', () => {
-    expect(toDisplayActivity({ ...base, average_heartrate: undefined }).heartRate).toBe('--')
+  it('uses -- when heartRate is missing', async () => {
+    const display = await toDisplayActivity({ ...base, average_heartrate: undefined })
+    expect(display.heartRate).toBe('--')
   })
 })
