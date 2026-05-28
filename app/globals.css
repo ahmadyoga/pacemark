@@ -1646,6 +1646,35 @@ button:disabled {
   font-family: var(--font-mono);
 }
 
+.ovl-elv-empty {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+}
+
+/* Sticker: Summit — bare elevation silhouette, no card wrapper, no background. */
+.ovl-sum-svg {
+  display: block;
+  width: 320px;
+  height: 120px;
+}
+
+.ovl-sum-empty {
+  display: inline-block;
+  width: 320px;
+  height: 120px;
+  line-height: 120px;
+  text-align: center;
+  font-size: 10px;
+  font-family: var(--font-mono);
+  letter-spacing: 0.05em;
+  color: rgba(120, 120, 120, 0.6);
+}
+
 /* Sticker: Battery */
 .ovl-battery {
   background: #111;
@@ -1892,22 +1921,36 @@ button:disabled {
   margin-top: 2px;
 }
 
+/* html2canvas mis-positions `border-top: dashed` on zero-height elements during export
+   (looks fine in the live preview, but the line ends up overlapping adjacent text in the PNG).
+   Render the dash pattern as a background-image on a sized block instead — captures reliably. */
 .ovl-rcpt-divider {
-  border: none;
-  border-top: 1px dashed rgba(0, 0, 0, 0.25);
-  margin: 8px 0;
+  height: 1px;
+  margin: 3px 0;
+  background-image: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.3) 0,
+    rgba(0, 0, 0, 0.3) 4px,
+    transparent 4px,
+    transparent 7px
+  );
+  background-size: 7px 1px;
+  background-repeat: repeat-x;
 }
 
 .ovl-rcpt-title {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  line-height: 1.2;
   color: #1a1a1a;
-  margin: 4px 0;
+  padding: 0 4px;
+  margin: 0;
   text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  /* Long activity names wrap rather than collide with the dashed dividers above/below. */
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .ovl-rcpt-rows {
@@ -2355,119 +2398,160 @@ button:disabled {
    STICKER — Race Bib
    ============================================================ */
 
-.ovl-bib {
-  width: 240px;
+/* Sticker: Race Bib — crenoe.app-inspired layout.
+   `.ovl.ovl-bib` specificity bump on text/colour rules so they survive the
+   `.tile-stage-light .ovl` cascade override (otherwise text greys out on the light stage). */
+.ovl.ovl-bib {
+  width: 360px;
   background: #fff;
-  border-radius: 6px;
+  color: #0d1320;
+  text-shadow: none;
+  border-radius: 14px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 8px 32px -8px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 10px 32px -10px rgba(0, 0, 0, 0.5);
 }
 
-.ovl-bib-bar {
-  height: 8px;
-  width: 100%;
-  flex-shrink: 0;
+/* Header bar: accent background, brand left, activity name right */
+.ovl-bib-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 18px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  font-size: 12px;
+}
+
+.ovl-bib-brand {
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+
+.ovl-bib-event {
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 60%;
+  text-align: right;
 }
 
 .ovl-bib-body {
-  padding: 12px 16px 14px;
+  padding: 0 22px 14px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.ovl-bib-header {
+/* Hero distance row. line-height 1 keeps descenders inside the box.
+   Negative margin-top absorbs the font's intrinsic ascent above cap-height — without
+   this, the 88px glyphs leave a ~20px ghost gap above them that html2canvas amplifies
+   at 4× scale into a large empty band in the exported PNG. */
+.ovl-bib-distance {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: baseline;
+  gap: 2px;
+  line-height: 1;
+  padding-bottom: 6px;
+  margin-top: -16px;
 }
 
-.ovl-bib-event {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  font-weight: 500;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: #444;
-}
-
-.ovl-bib-label {
-  font-family: var(--font-display);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #888;
-}
-
-.ovl-bib-number {
-  font-family: 'Archivo Black', 'Inter Tight', sans-serif;
-  font-size: 80px;
+.ovl.ovl-bib .ovl-bib-dist-v {
+  color: #0d1320;
   font-weight: 900;
-  line-height: 0.85;
-  letter-spacing: -0.06em;
-  text-align: center;
-  padding: 4px 0;
-  text-shadow: none;
+  font-size: 88px;
+  letter-spacing: -0.04em;
+  line-height: 1;
 }
 
-.ovl-bib-runner {
-  font-family: var(--font-display);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.14em;
+.ovl.ovl-bib .ovl-bib-dist-frac {
+  /* Decimal segment is the same weight/size; visually continuous with the integer part */
+  font-weight: 900;
+}
+
+.ovl.ovl-bib .ovl-bib-dist-u {
+  color: rgba(13, 19, 32, 0.35);
+  font-weight: 800;
+  font-size: 24px;
+  letter-spacing: 0.02em;
+  margin-left: 4px;
+}
+
+.ovl.ovl-bib .ovl-bib-runner {
+  color: #0d1320;
+  font-weight: 900;
+  font-size: 18px;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: #222;
-  text-align: center;
+  margin: 0;
 }
 
 .ovl-bib-rule {
   height: 1px;
-  background: #e5e5e5;
-  margin: 2px 0;
+  background: rgba(13, 19, 32, 0.25);
+  margin: 8px 0 0;
 }
 
+/* Stats row: three columns split by faint vertical rules */
 .ovl-bib-stats {
   display: flex;
-  justify-content: space-around;
-  gap: 8px;
+  align-items: stretch;
+  padding: 0;
 }
 
 .ovl-bib-stat {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1px;
+  gap: 4px;
+  padding: 6px 0 2px;
 }
 
-.ovl-bib-sv {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  color: #111;
+.ovl-bib-stat-sep {
+  width: 1px;
+  background: rgba(13, 19, 32, 0.12);
+  margin: 6px 0;
+}
+
+.ovl.ovl-bib .ovl-bib-sv {
+  color: #0d1320;
+  font-weight: 900;
+  font-size: 26px;
+  letter-spacing: -0.02em;
   line-height: 1;
 }
 
-.ovl-bib-sk {
-  font-family: var(--font-mono);
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: #888;
+.ovl.ovl-bib .ovl-bib-sk {
+  color: rgba(13, 19, 32, 0.45);
+  font-weight: 800;
+  font-size: 11px;
+  letter-spacing: 0.16em;
 }
 
-.ovl-bib-date {
-  font-family: var(--font-mono);
-  font-size: 8.5px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #aaa;
-  text-align: center;
-  margin-top: 2px;
+/* Dark footer bar */
+.ovl-bib-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #0d1320;
+  padding: 10px 18px;
+  font-weight: 800;
+  font-size: 13px;
+}
+
+.ovl-bib-foot-brand {
+  font-weight: 900;
+  letter-spacing: 0.01em;
+}
+
+.ovl.ovl-bib .ovl-bib-foot-date {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* ============================================================

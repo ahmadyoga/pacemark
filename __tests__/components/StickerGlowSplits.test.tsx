@@ -6,7 +6,7 @@ const run: DisplayActivity = {
   id: 1, title: 'Morning Run', date: 'May 17',
   distance: '10.2', pace: '5:32', duration: '54:12',
   heartRate: '142', elevation: '88', calories: '612',
-  city: 'Jakarta', routeSeed: 3.1, fresh: true,
+  city: 'Jakarta', routeSeed: 3.1, routePoints: [[10, 10], [50, 50], [90, 90]], elevationProfile: [], fresh: true,
   splits: [
     { km: 1, pace: '5:42', speed: 2.92, roundedKm: 1 },
     { km: 2, pace: '5:35', speed: 2.99, roundedKm: 2 },

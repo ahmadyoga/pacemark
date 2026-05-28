@@ -1,18 +1,17 @@
 import { RouteLine } from './RouteLine'
 
 interface MiniMapProps {
-  seed?: number
+  points: [number, number][]
   accent?: string
 }
 
-export function MiniMap({ seed = 1, accent = '#FF5A1F' }: MiniMapProps) {
+export function MiniMap({ points, accent = '#FF5A1F' }: MiniMapProps) {
   return (
     <div className="minimap">
       <div className="minimap-grid" />
       <div className="minimap-route">
-        <RouteLine seed={seed} stroke={accent} strokeWidth={2.2} />
+        <RouteLine points={points} stroke={accent} strokeWidth={2.2} />
       </div>
     </div>
   )
 }
-

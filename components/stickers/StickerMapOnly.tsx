@@ -5,7 +5,7 @@ export function StickerMapOnly({ run, accent }: StickerProps) {
   return (
     <div className="ovl ovl-maponly">
       <div className="ovl-mo-route">
-        <MapRoute seed={run.routeSeed} stroke={accent} strokeWidth={3} />
+        <MapRoute points={run.routePoints} stroke={accent} strokeWidth={3} />
       </div>
       <div className="ovl-mo-city">{run.city.toUpperCase()}</div>
     </div>

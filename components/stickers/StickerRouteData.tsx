@@ -8,7 +8,7 @@ export function StickerRouteData({ run, accent }: StickerProps) {
     <div className="ovl ovl-routedata">
       <div className="ovl-rd-map">
         <MapRoute
-          seed={run.routeSeed}
+          points={run.routePoints}
           stroke={accent}
           strokeWidth={2}
         />

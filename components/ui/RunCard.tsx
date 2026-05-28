@@ -32,7 +32,7 @@ export function RunCard({ run, active, onClick, accent }: RunCardProps) {
       className={`runcard ${active ? 'is-active' : ''}`}
       onClick={onClick}
     >
-      <MiniMap seed={run.routeSeed} accent={active ? accent : '#71717a'} />
+      <MiniMap points={run.routePoints} accent={active ? accent : '#71717a'} />
       <div className="runcard-body">
         <div className="runcard-top">
           <div className="runcard-title">

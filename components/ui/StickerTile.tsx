@@ -1,6 +1,6 @@
 'use client'
 import { useRef, useState } from 'react'
-import { stickerToBlob, downloadBlob, copyBlobToClipboard, shareBlobFile } from '@/lib/export'
+import { stickerToBlob, downloadBlob, copyBlobToClipboard, shareBlobFile, stickerFilename } from '@/lib/export'
 import type { DisplayActivity } from '@/lib/strava'
 import type { StickerDef, VisibleMetrics } from '@/components/stickers'
 
@@ -20,6 +20,7 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
 
   const Comp = def.comp
   const hasRounding = def.id === 'glowsplits' || def.id === 'pacesplits'
+  const filename = stickerFilename({ stickerId: def.id, title: run.title, distance: run.distance })
 
   async function handleCopy() {
     if (!captureRef.current) return
@@ -34,10 +35,10 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
       setCopyLabel('Copied')
     } catch {
       try {
-        await shareBlobFile(blob)
+        await shareBlobFile(blob, filename)
         setCopyLabel('Shared')
       } catch {
-        downloadBlob(blob)
+        downloadBlob(blob, filename)
         setCopyLabel('Saved')
       }
     }
@@ -49,7 +50,7 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
     setSaveState('working')
     try {
       const blob = await stickerToBlob(captureRef.current)
-      downloadBlob(blob)
+      downloadBlob(blob, filename)
       setSaveState('done')
       setTimeout(() => setSaveState('idle'), 1500)
     } catch {
@@ -78,18 +79,18 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
           <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
         </div>
       </div>
-      {/* Off-screen capture target: padding adds transparent border to exported PNG */}
+      {/* Off-screen capture target: wrapper is `inline-block` and sized exactly to the sticker so
+          the exported PNG has no asymmetric transparent border (cropped tight to the sticker). */}
       <div
         style={{
           position: 'fixed',
           left: -9999,
           top: -9999,
           pointerEvents: 'none',
-          display: 'block',
         }}
         aria-hidden="true"
       >
-        <div ref={captureRef} style={{ width: 'fit-content', padding: 24 }}>
+        <div ref={captureRef} style={{ display: 'inline-block' }}>
           <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
         </div>
       </div>

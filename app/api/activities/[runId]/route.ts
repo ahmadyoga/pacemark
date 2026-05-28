@@ -3,6 +3,7 @@ import { getSession } from '@/lib/session'
 import {
   refreshAccessToken,
   getActivityFromStrava,
+  getActivityStreamsFromStrava,
   toDisplayActivity,
 } from '@/lib/strava'
 
@@ -36,8 +37,11 @@ export async function GET(
   }
 
   try {
-    const activity = await getActivityFromStrava(session.access_token, id)
-    return NextResponse.json(await toDisplayActivity(activity))
+    const [activity, streams] = await Promise.all([
+      getActivityFromStrava(session.access_token, id),
+      getActivityStreamsFromStrava(session.access_token, id),
+    ])
+    return NextResponse.json(await toDisplayActivity(activity, streams, session.athlete_name))
   } catch {
     return NextResponse.json({ error: 'strava_error' }, { status: 502 })
   }

@@ -982,3 +982,82 @@ input, select { font: inherit; color: inherit; }
   .runcard-stat-v { font-size: 14px; }
   .picker-cta-bar { padding: 16px; }
 }
+
+/* ============================================================
+   VHS STICKERS (Camcorder & Playback)
+   ============================================================ */
+
+.ovl-vhs-cam, .ovl-vhs-play {
+  font-family: var(--font-mono);
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+/* Base sizes for export and preview */
+.ovl-vhs-cam.is-landscape, .ovl-vhs-play.is-landscape {
+  width: 320px;
+  height: 180px;
+}
+.ovl-vhs-cam.is-portrait, .ovl-vhs-play.is-portrait {
+  width: 180px;
+  height: 320px;
+}
+
+/* Camcorder Style (White with glow) */
+.ovl-vhs-cam {
+  color: #fff;
+  text-shadow: 0 0 4px rgba(255,255,255,0.8), 1px 1px 0 rgba(0,0,0,0.5);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Playback Style (Neon Green OSD) */
+.ovl-vhs-play {
+  color: #00ff00;
+  text-shadow: 0 0 6px rgba(0,255,0,0.9), 1px 1px 0 rgba(0,0,0,0.6);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* Scanlines overlay */
+.ovl-vhs-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 1px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 2px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* REC blinking dot */
+.ovl-vhs-rec::before {
+  content: "●";
+  color: #ff0000;
+  margin-right: 6px;
+  animation: vhs-blink 1s steps(2, start) infinite;
+}
+
+@keyframes vhs-blink {
+  to { visibility: hidden; }
+}
+
+/* Positioning */
+.ovl-vhs-rec { position: absolute; top: 12px; left: 12px; }
+.ovl-vhs-battery { position: absolute; top: 12px; right: 12px; }
+.ovl-vhs-status { position: absolute; top: 12px; left: 12px; font-size: 1.1em; }
+.ovl-vhs-duration { position: absolute; top: 36px; left: 12px; font-size: 1.2em; }
+.ovl-vhs-bottom-left { position: absolute; bottom: 12px; left: 12px; line-height: 1.3; }
+.ovl-vhs-mode, .ovl-vhs-channel { position: absolute; bottom: 12px; right: 12px; }
+
+/* Portrait adjustments */
+.is-portrait .ovl-vhs-duration { top: 42px; }
+.is-portrait .ovl-vhs-bottom-left { bottom: 16px; }
+

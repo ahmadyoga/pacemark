@@ -1,100 +1,64 @@
 interface MapRouteProps {
-  seed: number
+  /** Projected SVG-space points in viewBox 0..100 (from `DisplayActivity.routePoints`). */
+  points: [number, number][]
   stroke: string
   strokeWidth?: number
 }
 
-/** Seeded pseudo-random in [0,1) — each (seed, idx) pair gives a distinct value */
-function sr(seed: number, idx: number): number {
-  const s = Math.sin(seed * 91.233 + idx * 577.13) * 43758.5453
-  return s - Math.floor(s)
-}
-
-function buildPath(seed: number): string {
-  const N = 30
-  const pts: [number, number][] = [[0, 0]]
-  let x = 0, y = 0
-  // Start heading in a direction derived from seed so each route looks different
-  let angle = sr(seed, 99) * Math.PI * 2
-
-  for (let i = 0; i < N; i++) {
-    const r = sr(seed, i)
-    // ~12% chance of a sharp corner (like turning at a street); rest is gentle drift
-    const turn = r < 0.12
-      ? (sr(seed, i + 50) > 0.5 ? 1.35 : -1.35)
-      : (sr(seed, i + 100) - 0.5) * 0.6
-    angle += turn
-    const step = 4 + sr(seed, i + 200) * 10
-    x += Math.cos(angle) * step
-    y += Math.sin(angle) * step
-    pts.push([x, y])
+/** Build a smooth path through points using mid-point quadratic beziers. */
+function buildPath(pts: [number, number][]): string {
+  const d: string[] = [`M ${pts[0][0].toFixed(2)},${pts[0][1].toFixed(2)}`]
+  for (let i = 1; i < pts.length - 1; i++) {
+    const mx = ((pts[i][0] + pts[i + 1][0]) / 2).toFixed(2)
+    const my = ((pts[i][1] + pts[i + 1][1]) / 2).toFixed(2)
+    d.push(`Q ${pts[i][0].toFixed(2)},${pts[i][1].toFixed(2)} ${mx},${my}`)
   }
-
-  // Normalize: fit into [10, 90] × [10, 90] inside a 100×100 viewBox
-  const xs = pts.map(p => p[0])
-  const ys = pts.map(p => p[1])
-  const minX = Math.min(...xs), maxX = Math.max(...xs)
-  const minY = Math.min(...ys), maxY = Math.max(...ys)
-  const scale = Math.min(80 / (maxX - minX || 1), 80 / (maxY - minY || 1))
-  const ox = 10 + (80 - (maxX - minX) * scale) / 2
-  const oy = 10 + (80 - (maxY - minY) * scale) / 2
-
-  const norm = pts.map(([px, py]): [number, number] => [
-    ox + (px - minX) * scale,
-    oy + (py - minY) * scale,
-  ])
-
-  // Build a smooth path using mid-point quadratic beziers
-  const d: string[] = [`M ${norm[0][0].toFixed(2)},${norm[0][1].toFixed(2)}`]
-  for (let i = 1; i < norm.length - 1; i++) {
-    const mx = ((norm[i][0] + norm[i + 1][0]) / 2).toFixed(2)
-    const my = ((norm[i][1] + norm[i + 1][1]) / 2).toFixed(2)
-    d.push(`Q ${norm[i][0].toFixed(2)},${norm[i][1].toFixed(2)} ${mx},${my}`)
-  }
-  const last = norm[norm.length - 1]
+  const last = pts[pts.length - 1]
   d.push(`L ${last[0].toFixed(2)},${last[1].toFixed(2)}`)
-
   return d.join(' ')
 }
 
-export function MapRoute({ seed, stroke, strokeWidth = 2.5 }: MapRouteProps) {
-  const d = buildPath(seed)
-  // Parse start / end coords from path string for dots
-  const startM = d.match(/^M\s*([\d.]+),([\d.]+)/)
-  const endL = d.match(/L\s*([\d.]+),([\d.]+)$/)
-  const sx = startM ? parseFloat(startM[1]) : 10
-  const sy = startM ? parseFloat(startM[2]) : 10
-  const ex = endL ? parseFloat(endL[1]) : 90
-  const ey = endL ? parseFloat(endL[2]) : 90
+export function MapRoute({ points, stroke, strokeWidth = 2.5 }: MapRouteProps) {
+  // No-GPS activities (e.g. treadmill) → render nothing per design.
+  if (!points || points.length < 2) return null
+
+  // Render route lines noticeably thinner than the caller-requested width so the GPS shape reads
+  // delicately instead of as a chunky neon outline. Single touchpoint keeps all callers consistent.
+  const sw = strokeWidth * 0.55
+
+  const d = buildPath(points)
+  const [sx, sy] = points[0]
+  const [ex, ey] = points[points.length - 1]
 
   return (
-    <svg viewBox="0 0 100 100" style={{ width: '100%', height: '100%' }}>
-      {/* Soft glow behind the route */}
+    <svg
+      viewBox="0 0 100 100"
+      preserveAspectRatio="xMidYMid meet"
+      style={{ width: '100%', height: '100%' }}
+    >
+      {/* Subtle glow behind the route — kept narrow so the line stays crisp */}
       <path
         d={d}
         fill="none"
         stroke={stroke}
-        strokeWidth={strokeWidth * 3}
+        strokeWidth={sw * 1.8}
         strokeLinecap="round"
         strokeLinejoin="round"
-        opacity={0.12}
+        opacity={0.16}
       />
       {/* Main route line */}
       <path
         d={d}
         fill="none"
         stroke={stroke}
-        strokeWidth={strokeWidth}
+        strokeWidth={sw}
         strokeLinecap="round"
         strokeLinejoin="round"
-        opacity={0.92}
+        opacity={0.95}
       />
-      {/* Start dot */}
-      <circle cx={sx} cy={sy} r={3} fill={stroke} opacity={0.9} />
-      {/* End dot (finish) */}
-      <circle cx={ex} cy={ey} r={3} fill={stroke} opacity={0.9} />
-      <circle cx={ex} cy={ey} r={5.5} fill="none" stroke={stroke} strokeWidth={1.2} opacity={0.45} />
+      {/* Small start / end markers (no outer ring) */}
+      <circle cx={sx} cy={sy} r={1.1} fill={stroke} opacity={0.95} />
+      <circle cx={ex} cy={ey} r={1.1} fill={stroke} opacity={0.95} />
     </svg>
   )
 }
-

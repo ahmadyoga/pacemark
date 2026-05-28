@@ -5,7 +5,7 @@ export function StickerMapPanel({ run, accent }: StickerProps) {
   return (
     <div className="ovl ovl-mappanel">
       <div className="ovl-mp-map">
-        <MapRoute seed={run.routeSeed} stroke={accent} strokeWidth={3} />
+        <MapRoute points={run.routePoints} stroke={accent} strokeWidth={3} />
       </div>
       <div className="ovl-mp-panel">
         <div className="ovl-mp-city">{run.city.toUpperCase()}</div>

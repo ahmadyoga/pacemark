@@ -40,7 +40,24 @@ export async function copyBlobToClipboard(blob: Blob): Promise<void> {
   await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })])
 }
 
-export async function shareBlobFile(blob: Blob): Promise<void> {
-  const file = new File([blob], 'pacemark-sticker.png', { type: 'image/png' })
+export async function shareBlobFile(blob: Blob, filename = 'pacemark-sticker.png'): Promise<void> {
+  const file = new File([blob], filename, { type: 'image/png' })
   await navigator.share({ files: [file] })
+}
+
+/**
+ * Build a download-safe filename for an exported sticker, e.g.
+ * `pacemark-summit-morning-run-10.0km.png`. Falls back to the generic name when run/def missing.
+ */
+export function stickerFilename(opts: { stickerId: string; title: string; distance: string }): string {
+  const slug = (s: string) =>
+    s
+      .toLowerCase()
+      .normalize('NFKD')
+      .replace(/[^\w\s-]/g, '')
+      .trim()
+      .replace(/[\s_]+/g, '-')
+      .replace(/-+/g, '-')
+      .slice(0, 40) || 'run'
+  return `pacemark-${slug(opts.stickerId)}-${slug(opts.title)}-${opts.distance}km.png`
 }

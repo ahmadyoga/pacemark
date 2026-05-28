@@ -1,46 +1,40 @@
 interface RouteLineProps {
-  seed?: number
+  /** Projected SVG-space points in viewBox 0..100 (from `DisplayActivity.routePoints`). */
+  points: [number, number][]
   stroke?: string
   strokeWidth?: number
   opacity?: number
-  height?: number
 }
 
+/** Renders the activity's real GPS trace for the run-card thumbnail. Hidden when no GPS. */
 export function RouteLine({
-  seed = 1,
+  points,
   stroke = 'currentColor',
   strokeWidth = 2,
   opacity = 1,
-  height = 36,
 }: RouteLineProps) {
-  const points: string[] = []
-  const N = 22
-  for (let i = 0; i < N; i++) {
-    const t = i / (N - 1)
-    const wob = Math.sin(t * 6 + seed) * 12 + Math.cos(t * 9 + seed * 1.3) * 5
-    const x = 6 + t * 88
-    const y = 50 + wob
-    points.push(`${x.toFixed(1)},${y.toFixed(1)}`)
-  }
-  const first = points[0].split(',')
-  const last = points[points.length - 1].split(',')
+  if (!points || points.length < 2) return null
+
+  const poly = points.map(([x, y]) => `${x.toFixed(1)},${y.toFixed(1)}`).join(' ')
+  const [sx, sy] = points[0]
+  const [ex, ey] = points[points.length - 1]
 
   return (
     <svg
       viewBox="0 0 100 100"
-      preserveAspectRatio="none"
-      style={{ width: '100%', height, display: 'block', opacity }}
+      preserveAspectRatio="xMidYMid meet"
+      style={{ width: '100%', height: '100%', display: 'block', opacity }}
     >
       <polyline
-        points={points.join(' ')}
+        points={poly}
         fill="none"
         stroke={stroke}
         strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx={first[0]} cy={first[1]} r="2.5" fill={stroke} />
-      <circle cx={last[0]} cy={last[1]} r="2.5" fill={stroke} />
+      <circle cx={sx} cy={sy} r="2.5" fill={stroke} />
+      <circle cx={ex} cy={ey} r="2.5" fill={stroke} />
     </svg>
   )
 }
