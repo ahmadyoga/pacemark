@@ -23,6 +23,8 @@ import { StickerGhostStats } from './StickerGhostStats'
 import { StickerRaceBib } from './StickerRaceBib'
 import { StickerEquation } from './StickerEquation'
 import { StickerHighlight } from './StickerHighlight'
+import { StickerVHSCamcorder } from './StickerVHSCamcorder'
+import { StickerVHSPlayback } from './StickerVHSPlayback'
 import type { StickerDef } from './types'
 
 export const STICKER_DEFS: StickerDef[] = [
@@ -49,4 +51,6 @@ export const STICKER_DEFS: StickerDef[] = [
   { id: 'racebib',        name: 'Race Bib',         desc: 'Official bib',  comp: StickerRaceBib },
   { id: 'equation',       name: 'Equation',         desc: 'Math formula',  comp: StickerEquation },
   { id: 'highlight',      name: 'Highlight',        desc: 'Prose marks',   comp: StickerHighlight },
+  { id: 'vhs-camcorder',  name: 'VHS Camcorder',    desc: 'Record mode',   comp: StickerVHSCamcorder },
+  { id: 'vhs-playback',   name: 'VHS Playback',     desc: 'VCR OSD',       comp: StickerVHSPlayback },
 ]
