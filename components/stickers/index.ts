@@ -25,6 +25,11 @@ import { StickerEquation } from './StickerEquation'
 import { StickerHighlight } from './StickerHighlight'
 import { StickerVHSCamcorder } from './StickerVHSCamcorder'
 import { StickerVHSPlayback } from './StickerVHSPlayback'
+import { StickerCompleted } from './StickerCompleted'
+import { StickerHeartbeat } from './StickerHeartbeat'
+import { StickerVerified } from './StickerVerified'
+import { StickerWindow } from './StickerWindow'
+import { StickerSwissGrid } from './StickerSwissGrid'
 import type { StickerDef } from './types'
 import { StickerSummit } from './StickerSummit'
 
@@ -55,4 +60,9 @@ export const STICKER_DEFS: StickerDef[] = [
   { id: 'highlight', name: 'Highlight', desc: 'Prose marks', comp: StickerHighlight },
   { id: 'vhs-camcorder', name: 'VHS Camcorder', desc: 'Record mode', comp: StickerVHSCamcorder },
   { id: 'vhs-playback', name: 'VHS Playback', desc: 'VCR OSD', comp: StickerVHSPlayback },
+  { id: 'completed', name: 'Completed', desc: 'Checklist goals', comp: StickerCompleted },
+  { id: 'heartbeat', name: 'Heartbeat', desc: 'ECG Pulse Graph', comp: StickerHeartbeat },
+  { id: 'verified', name: 'Verified', desc: 'Strava License', comp: StickerVerified },
+  { id: 'window', name: 'Window', desc: 'Retro Desktop OS', comp: StickerWindow },
+  { id: 'swissgrid', name: 'Swiss Grid', desc: 'Brutalist Swiss', comp: StickerSwissGrid },
 ]

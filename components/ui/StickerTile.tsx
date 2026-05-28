@@ -79,8 +79,8 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
           <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
         </div>
       </div>
-      {/* Off-screen capture target: wrapper is `inline-block` and sized exactly to the sticker so
-          the exported PNG has no asymmetric transparent border (cropped tight to the sticker). */}
+      {/* Off-screen capture target: bare inline-block so html2canvas captures exactly
+          the sticker component's own pixels — no wrapper padding or background. */}
       <div
         style={{
           position: 'fixed',
