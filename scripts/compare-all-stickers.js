@@ -95,11 +95,28 @@ async function run() {
     downloadPath: DOWNLOADS_DIR,
   });
 
+  // Capture console errors to see if JS is failing
+  const jsErrors = [];
+  page.on('console', msg => { if (msg.type() === 'error') jsErrors.push(msg.text()); });
+  page.on('pageerror', err => jsErrors.push(err.message));
+
   console.log(`🌐  Navigating to ${STUDIO_URL} …`);
   await page.goto(STUDIO_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
   const actualUrl = page.url();
   const actualTitle = await page.title();
   console.log(`   → landed on: ${actualUrl} ("${actualTitle}")`);
+
+  // Wait a bit for React hydration + fetch
+  await wait(5000);
+
+  // Debug: dump body text and any JS errors
+  const bodyText = await page.evaluate(() => document.body.innerText.slice(0, 300));
+  const hasDotTile = await page.evaluate(() => !!document.querySelector('.tile'));
+  const hasGrid    = await page.evaluate(() => !!document.querySelector('.studio-grid'));
+  console.log(`   DOM: hasTile=${hasDotTile} hasGrid=${hasGrid}`);
+  console.log(`   Body snippet: ${bodyText.replace(/\n/g, ' ').slice(0, 200)}`);
+  if (jsErrors.length) console.log(`   JS errors: ${jsErrors.join(' | ')}`);
+
   await page.waitForSelector('.studio-grid', { timeout: 30000 });
   await wait(2000); // let fonts / SVGs settle
 
