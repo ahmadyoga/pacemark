@@ -3278,7 +3278,8 @@ button:disabled {
 
 .is-export {
   background: transparent !important;
-  padding: 0 !important;
+  /* padding intentionally omitted: lib/export.ts sets it inline (EXPORT_PAD) so the
+     PNG keeps transparent breathing room around the sticker. */
   margin: 0 !important;
   border: none !important;
   box-shadow: none !important;
@@ -3290,9 +3291,36 @@ button:disabled {
   content: none !important;
 }
 
-/* Remove box shadow and margins from child overlays during export to enable tight cropping */
+/* Drop child glow/shadow during export so it doesn't bleed into the transparent PNG.
+   NOTE: child margins are deliberately preserved — single-render captures the same card
+   the user sees, and inter-section margins (Race Bib body, Swiss Grid sections, etc.) are
+   part of the layout. Zeroing them collapsed cards vertically (the export "shrink" bug). */
 .is-export .ovl,
 .is-export [class*="ovl-"] {
   box-shadow: none !important;
-  margin: 0 !important;
+}
+
+/* ── backdrop-filter fallbacks ─────────────────────────────────────────────
+   html2canvas cannot render backdrop-filter at all — it silently ignores it,
+   leaving only the raw rgba background (which looks washed-out / translucent
+   over a black void). Replace with a solid-equivalent colour so the PNG
+   matches what the user sees in the preview.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Route Data sticker: rgba(0,0,0,0.4) + blur → solid near-black */
+.is-export .ovl-routedata {
+  backdrop-filter: none !important;
+  background: rgba(0, 0, 0, 0.88) !important;
+}
+
+/* Equation chip: rgba(255,255,255,0.08) + blur → legible frosted tint */
+.is-export .ovl-eq-chip {
+  backdrop-filter: none !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Completed checklist: rgba(10,10,12,0.85) + blur → solid dark card */
+.is-export .ovl-completed {
+  backdrop-filter: none !important;
+  background: rgba(10, 10, 12, 0.97) !important;
 }

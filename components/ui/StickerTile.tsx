@@ -9,10 +9,9 @@ interface StickerTileProps {
   run: DisplayActivity
   visible: VisibleMetrics
   accent: string
-  bg: 'dark' | 'light' | 'checker'
 }
 
-export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps) {
+export function StickerTile({ def, run, visible, accent }: StickerTileProps) {
   const captureRef = useRef<HTMLDivElement>(null)
   const [copyLabel, setCopyLabel] = useState('')
   const [saveState, setSaveState] = useState<'idle' | 'working' | 'done'>('idle')
@@ -74,24 +73,20 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
           </button>
         )}
       </div>
-      <div className={`tile-stage tile-stage-${bg}`}>
+      {/* Always transparent: the checker backdrop just visualises transparency in
+          the preview. Export is transparent PNG, so there is one single source of
+          truth for the sticker's pixels. */}
+      <div className="tile-stage tile-stage-checker">
         <div className="tile-stage-inner">
-          <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
-        </div>
-      </div>
-      {/* Off-screen capture target: bare inline-block so html2canvas captures exactly
-          the sticker component's own pixels — no wrapper padding or background. */}
-      <div
-        style={{
-          position: 'fixed',
-          left: -9999,
-          top: -9999,
-          pointerEvents: 'none',
-        }}
-        aria-hidden="true"
-      >
-        <div ref={captureRef} style={{ display: 'inline-block' }}>
-          <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
+          {/* Single render: this is both the preview AND the html2canvas capture
+              target. Capturing the live node guarantees the export matches the
+              preview exactly — same fonts, same layout. The wrapper is a bare
+              inline-block so capture grabs only the sticker's own pixels; the stage
+              checker backdrop (`::before`) and `.tile-stage-inner` drop-shadow are on
+              ancestors and stay out of the transparent PNG. */}
+          <div ref={captureRef} style={{ display: 'inline-block' }}>
+            <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
+          </div>
         </div>
       </div>
       <div className="tile-actions">

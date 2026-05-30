@@ -46,7 +46,6 @@ export default function StudioPage() {
   const [loading, setLoading] = useState(true)
   const [visible, setVisible] = useState<VisibleMetrics>(DEFAULT_VISIBLE)
   const [accent, setAccent] = useState(ACCENT_SWATCHES[0])
-  const [bg, setBg] = useState<'dark' | 'light' | 'checker'>('checker')
 
   useEffect(() => {
     if (!runId) return
@@ -126,21 +125,6 @@ export default function StudioPage() {
               ))}
             </div>
           </div>
-          <div className="toolbar-sub">
-            <div className="toolbar-eyebrow">PREVIEW ON</div>
-            <div className="bg-row">
-              {(['checker', 'dark', 'light'] as const).map((id) => (
-                <button
-                  key={id}
-                  className={`bg-btn ${bg === id ? 'is-active' : ''}`}
-                  onClick={() => setBg(id)}
-                >
-                  <span className={`bg-swatch bg-swatch-${id}`} />
-                  {id === 'dark' ? 'Dark photo' : id === 'light' ? 'Light photo' : 'Transparent'}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
 
@@ -152,7 +136,6 @@ export default function StudioPage() {
             run={run}
             visible={visible}
             accent={accent}
-            bg={bg}
           />
         ))}
       </div>

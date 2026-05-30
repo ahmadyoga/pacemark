@@ -2,245 +2,333 @@
  * compare-all-stickers.js
  * ──────────────────────────────────────────────────────────────────────────
  * For every sticker tile on the studio page:
- *   1. Screenshot the preview (tile-stage-inner)
- *   2. Screenshot the off-screen captureRef (what html2canvas will see)
- *   3. Scale the captureRef screenshot down to match preview size
+ *   1. Screenshot the preview  (.tile-stage-inner > div  — the captureRef node)
+ *   2. Click the "PNG" button and wait for the file to land in downloads-compare/
+ *   3. Scale the downloaded PNG down to match the preview screenshot size
  *   4. Pixel-compare with pixelmatch and report similarity %
  *
  * Usage:  node scripts/compare-all-stickers.js
- * Output: reports/sticker-comparison/   — side-by-side PNGs + summary.json
+ * Output: reports/sticker-comparison/  — side-by-side PNGs + summary.json
  */
 
-const fs   = require('fs');
-const path = require('path');
-const puppeteer  = require('puppeteer');
-const { PNG }    = require('pngjs');
-const pixelmatch = require('pixelmatch');
+const fs        = require('fs');
+const path      = require('path');
+const puppeteer = require('puppeteer');
+const { PNG }   = require('pngjs');
+const _pm = require('pixelmatch');
+const pixelmatch = typeof _pm === 'function' ? _pm : (_pm.default ?? _pm);
 
-const STUDIO_URL   = 'http://localhost:3000/studio/18614354583';
-const REPORT_DIR   = path.resolve(__dirname, '../reports/sticker-comparison');
+const STUDIO_URL    = 'http://localhost:3000/studio/18689236960';
+const REPORT_DIR    = path.resolve(__dirname, '../reports/sticker-comparison');
 const DOWNLOADS_DIR = path.resolve(__dirname, '../downloads-compare');
-const E2E_SECRET   = 'local-e2e-dev';
+const E2E_SECRET    = 'local-e2e-dev';
 
-// Clean / create output dirs
-[REPORT_DIR, DOWNLOADS_DIR].forEach(d => {
-  if (fs.existsSync(d)) fs.rmSync(d, { recursive: true });
-  fs.mkdirSync(d, { recursive: true });
-});
+// Download poll settings
+const POLL_INTERVAL_MS = 200;
+const DOWNLOAD_TIMEOUT_MS = 15000;
+
+// ── helpers ─────────────────────────────────────────────────────────────────
 
 function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-/** Resize `src` PNG to exactly (targetW × targetH) using nearest-neighbour. */
+/**
+ * Wait until a NEW .png file appears in dir that wasn't there before snapshot.
+ * Returns the full path of the new file, or null on timeout.
+ */
+async function waitForNewPng(dir, beforeSnapshot) {
+  const deadline = Date.now() + DOWNLOAD_TIMEOUT_MS;
+  while (Date.now() < deadline) {
+    const current = new Set(fs.readdirSync(dir).filter(f => f.endsWith('.png')));
+    for (const f of current) {
+      if (!beforeSnapshot.has(f)) {
+        const full = path.join(dir, f);
+        // Wait until the file isn't still being written (size stable)
+        let size = -1;
+        for (let i = 0; i < 10; i++) {
+          await wait(150);
+          const s = fs.statSync(full).size;
+          if (s === size && s > 0) return full;
+          size = s;
+        }
+        return full;
+      }
+    }
+    await wait(POLL_INTERVAL_MS);
+  }
+  return null;
+}
+
+/**
+ * Resize `src` PNG to exactly (targetW × targetH) using area-average (box) downscaling.
+ * This is much closer to browser bilinear scaling than nearest-neighbour and avoids
+ * the harsh pixel-grid differences that make font rendering look mis-matched.
+ */
 function resizePNG(src, targetW, targetH) {
   const dst = new PNG({ width: targetW, height: targetH });
   const scaleX = src.width  / targetW;
   const scaleY = src.height / targetH;
-  for (let y = 0; y < targetH; y++) {
-    for (let x = 0; x < targetW; x++) {
-      const sx = Math.min(Math.floor(x * scaleX), src.width  - 1);
-      const sy = Math.min(Math.floor(y * scaleY), src.height - 1);
-      const si = (sy * src.width  + sx) * 4;
-      const di = (y  * targetW   + x ) * 4;
-      dst.data[di]     = src.data[si];
-      dst.data[di + 1] = src.data[si + 1];
-      dst.data[di + 2] = src.data[si + 2];
-      dst.data[di + 3] = src.data[si + 3];
+  for (let dy = 0; dy < targetH; dy++) {
+    for (let dx = 0; dx < targetW; dx++) {
+      const x0 = dx * scaleX, x1 = x0 + scaleX;
+      const y0 = dy * scaleY, y1 = y0 + scaleY;
+      let r = 0, g = 0, b = 0, a = 0, n = 0;
+      for (let sy = Math.floor(y0); sy < Math.ceil(y1); sy++) {
+        const wy = Math.min(sy + 1, y1) - Math.max(sy, y0);
+        for (let sx = Math.floor(x0); sx < Math.ceil(x1); sx++) {
+          const wx = Math.min(sx + 1, x1) - Math.max(sx, x0);
+          const w  = wx * wy;
+          const si = (Math.min(sy, src.height - 1) * src.width + Math.min(sx, src.width - 1)) * 4;
+          r += src.data[si]     * w;
+          g += src.data[si + 1] * w;
+          b += src.data[si + 2] * w;
+          a += src.data[si + 3] * w;
+          n += w;
+        }
+      }
+      const di = (dy * targetW + dx) * 4;
+      dst.data[di]     = Math.round(r / n);
+      dst.data[di + 1] = Math.round(g / n);
+      dst.data[di + 2] = Math.round(b / n);
+      dst.data[di + 3] = Math.round(a / n);
     }
   }
   return dst;
 }
 
-/** Save a horizontal side-by-side of two equal-sized PNGs. */
+/**
+ * Flatten a PNG (which may have transparent/semi-transparent pixels from the checker
+ * preview background or the export's transparent bg) onto a solid colour so that
+ * transparency differences don't count as pixel mismatches.
+ */
+function flattenPNG(src, bgR = 26, bgG = 26, bgB = 31) {
+  const dst = new PNG({ width: src.width, height: src.height });
+  for (let i = 0; i < src.width * src.height; i++) {
+    const si = i * 4;
+    const alpha = src.data[si + 3] / 255;
+    dst.data[si]     = Math.round(src.data[si]     * alpha + bgR * (1 - alpha));
+    dst.data[si + 1] = Math.round(src.data[si + 1] * alpha + bgG * (1 - alpha));
+    dst.data[si + 2] = Math.round(src.data[si + 2] * alpha + bgB * (1 - alpha));
+    dst.data[si + 3] = 255;
+  }
+  return dst;
+}
+
+/** Save a horizontal side-by-side of two equal-sized PNGs separated by a 4 px grey bar. */
 function saveSideBySide(a, b, outPath) {
-  const w = a.width + b.width + 10;
+  const SEP = 4;
+  const w = a.width + b.width + SEP;
   const h = Math.max(a.height, b.height);
   const out = new PNG({ width: w, height: h });
-  // fill with mid-grey separator
-  out.data.fill(0x88);
+  out.data.fill(0x80); // mid-grey separator
 
   const copy = (src, offsetX) => {
     for (let y = 0; y < src.height; y++) {
       for (let x = 0; x < src.width; x++) {
-        const si = (y * src.width  + x) * 4;
-        const di = (y * w          + x + offsetX) * 4;
+        const si = (y * src.width + x) * 4;
+        const di = (y * w + x + offsetX) * 4;
         out.data[di]     = src.data[si];
         out.data[di + 1] = src.data[si + 1];
         out.data[di + 2] = src.data[si + 2];
-        out.data[di + 3] = 255; // force opaque so PNG shows correctly
+        out.data[di + 3] = 255; // force opaque for side-by-side readability
       }
     }
   };
   copy(a, 0);
-  copy(b, a.width + 10);
+  copy(b, a.width + SEP);
   fs.writeFileSync(outPath, PNG.sync.write(out));
 }
 
+// ── main ────────────────────────────────────────────────────────────────────
+
 async function run() {
-  console.log('🔍  All-Sticker Preview vs. Export Comparison\n');
+  console.log('🔍  Pacemark — Sticker Preview vs. Export Comparison\n');
+
+  // Clean / create output dirs
+  [REPORT_DIR, DOWNLOADS_DIR].forEach(d => {
+    if (fs.existsSync(d)) fs.rmSync(d, { recursive: true });
+    fs.mkdirSync(d, { recursive: true });
+  });
 
   const browser = await puppeteer.launch({
     headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      // Prevent the x-e2e-test header from triggering CORS preflight on
+      // cross-origin requests (Google Fonts). Has no security impact in CI.
+      '--disable-web-security',
+    ],
   });
 
   const page = await browser.newPage();
-  await page.setViewport({ width: 1400, height: 900 });
-  // Send the bypass header on every request so middleware lets us through without a real session
+  await page.setViewport({ width: 1600, height: 900 });
+
+  // Bypass auth middleware in E2E mode
   await page.setExtraHTTPHeaders({ 'x-e2e-test': E2E_SECRET });
 
-  // Allow downloads into DOWNLOADS_DIR
+  // Wire up download destination
   const client = await page.target().createCDPSession();
   await client.send('Page.setDownloadBehavior', {
     behavior: 'allow',
     downloadPath: DOWNLOADS_DIR,
   });
 
-  // Capture console errors to see if JS is failing
+  // Capture JS console errors for debugging
   const jsErrors = [];
   page.on('console', msg => { if (msg.type() === 'error') jsErrors.push(msg.text()); });
   page.on('pageerror', err => jsErrors.push(err.message));
 
   console.log(`🌐  Navigating to ${STUDIO_URL} …`);
-  await page.goto(STUDIO_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  const actualUrl = page.url();
-  const actualTitle = await page.title();
-  console.log(`   → landed on: ${actualUrl} ("${actualTitle}")`);
+  await page.goto(STUDIO_URL, { waitUntil: 'networkidle2', timeout: 30000 });
+  console.log(`   → title: "${await page.title()}"`);
 
-  // Wait a bit for React hydration + fetch
-  await wait(5000);
-
-  // Debug: dump body text and any JS errors
-  const bodyText = await page.evaluate(() => document.body.innerText.slice(0, 300));
-  const hasDotTile = await page.evaluate(() => !!document.querySelector('.tile'));
-  const hasGrid    = await page.evaluate(() => !!document.querySelector('.studio-grid'));
-  console.log(`   DOM: hasTile=${hasDotTile} hasGrid=${hasGrid}`);
-  console.log(`   Body snippet: ${bodyText.replace(/\n/g, ' ').slice(0, 200)}`);
-  if (jsErrors.length) console.log(`   JS errors: ${jsErrors.join(' | ')}`);
-
+  // Wait for React hydration + activity fetch
   await page.waitForSelector('.studio-grid', { timeout: 30000 });
-  await wait(2000); // let fonts / SVGs settle
+  await wait(3000); // let fonts, SVGs and map routes finish rendering
 
-  // Collect all tile names
+  if (jsErrors.length) console.warn(`   ⚠  JS errors: ${jsErrors.join(' | ')}`);
+
+  // Collect tile names in DOM order
   const tileNames = await page.evaluate(() =>
     [...document.querySelectorAll('.tile-name')].map(el => el.textContent.trim())
   );
-  console.log(`📋  Found ${tileNames.length} sticker tiles: ${tileNames.join(', ')}\n`);
+  console.log(`📋  ${tileNames.length} sticker tiles: ${tileNames.join(', ')}\n`);
 
   const results = [];
 
   for (const name of tileNames) {
     process.stdout.write(`   [${name}] … `);
 
-    // Find the tile element
-    const tile = await page.evaluateHandle((n) => {
-      const all = document.querySelectorAll('.tile');
-      for (const t of all) {
-        const nameEl = t.querySelector('.tile-name');
-        if (nameEl && nameEl.textContent.trim() === n) return t;
+    // ── locate the tile ──────────────────────────────────────────────────
+    const tileHandle = await page.evaluateHandle(n => {
+      for (const t of document.querySelectorAll('.tile')) {
+        const el = t.querySelector('.tile-name');
+        if (el && el.textContent.trim() === n) return t;
       }
       return null;
     }, name);
 
-    if (!tile || !(await tile.asElement())) {
-      console.log('⚠️  tile element not found — skip');
-      results.push({ name, status: 'skip', reason: 'element not found' });
+    if (!tileHandle || !(await tileHandle.asElement())) {
+      console.log('⚠️   tile not found — skip');
+      results.push({ name, status: 'skip', reason: 'tile not found' });
       continue;
     }
 
-    // 1. Screenshot the visible preview (tile-stage-inner)
-    const previewEl = await tile.$('.tile-stage-inner');
-    if (!previewEl) {
-      console.log('⚠️  .tile-stage-inner not found — skip');
-      results.push({ name, status: 'skip', reason: '.tile-stage-inner missing' });
-      continue;
-    }
-    const previewPath = path.join(REPORT_DIR, `${name.replace(/[^a-z0-9]/gi, '_')}_preview.png`);
-    await previewEl.screenshot({ path: previewPath, omitBackground: true });
+    // Scroll the tile into view so Puppeteer can screenshot it reliably
+    await tileHandle.evaluate(el => el.scrollIntoView({ block: 'center' }));
+    await wait(300);
 
-    // 2. Screenshot the off-screen captureRef
-    //    It's the first [aria-hidden=true] child → its first child div
-    const captureHandle = await tile.evaluateHandle(() => {
-      // tile > div[aria-hidden] > div (the captureRef)
-      const tile = document.querySelector
-        ? undefined // eslint
-        : null;
-      return null;
+    // ── 1. Screenshot the preview node ───────────────────────────────────
+    // Capture the captureRef div directly: .tile-stage-inner > div
+    // This is the exact node html2canvas will see (same node, same CSS cascade).
+    // We screenshot it without the checker backdrop so we're comparing
+    // sticker pixels only — identical to what the PNG export should contain.
+    const previewNodeHandle = await tileHandle.evaluateHandle(tileEl => {
+      const inner = tileEl.querySelector('.tile-stage-inner');
+      return inner ? inner.firstElementChild : null;
     });
 
-    // Simpler: use page.$ on a known positional selector relative to the tile
-    const captureEl = await tile.evaluateHandle(tileEl => {
-      const ariaHidden = tileEl.querySelector('[aria-hidden="true"]');
-      return ariaHidden ? ariaHidden.firstElementChild : null;
-    });
-
-    let capturePath = null;
-    if (captureEl && await captureEl.asElement()) {
-      capturePath = path.join(REPORT_DIR, `${name.replace(/[^a-z0-9]/gi, '_')}_export.png`);
-      await captureEl.asElement().screenshot({
-        path: capturePath,
-        omitBackground: true,
-      });
-    }
-
-    // 3. Pixel-compare
-    let result = { name, status: 'ok', similarity: null, reason: null };
-
-    if (!capturePath || !fs.existsSync(capturePath)) {
-      result = { name, status: 'skip', reason: 'captureRef screenshot failed' };
-      console.log('⚠️  captureRef screenshot failed — skip');
-      results.push(result);
+    if (!previewNodeHandle || !(await previewNodeHandle.asElement())) {
+      console.log('⚠️   .tile-stage-inner > div not found — skip');
+      results.push({ name, status: 'skip', reason: 'preview node missing' });
       continue;
     }
 
-    const previewPng   = PNG.sync.read(fs.readFileSync(previewPath));
-    const capturePng   = PNG.sync.read(fs.readFileSync(capturePath));
+    const safeName    = name.replace(/[^a-z0-9]/gi, '_');
+    const previewPath = path.join(REPORT_DIR, `${safeName}_preview.png`);
 
-    // Scale capture down to preview size for comparison
-    const scaled = resizePNG(capturePng, previewPng.width, previewPng.height);
+    await previewNodeHandle.asElement().screenshot({
+      path: previewPath,
+      omitBackground: true,   // transparent PNG — matches export intent
+    });
+
+    // ── 2. Click PNG button & wait for the downloaded file ───────────────
+    const pngBtn = await tileHandle.$('.tile-btn-save');
+    if (!pngBtn) {
+      console.log('⚠️   PNG button not found — skip');
+      results.push({ name, status: 'skip', reason: 'PNG button missing' });
+      continue;
+    }
+
+    // Snapshot what's already in downloads dir before clicking
+    const beforeSnapshot = new Set(
+      fs.readdirSync(DOWNLOADS_DIR).filter(f => f.endsWith('.png'))
+    );
+
+    await pngBtn.click();
+
+    const downloadedPath = await waitForNewPng(DOWNLOADS_DIR, beforeSnapshot);
+    if (!downloadedPath) {
+      console.log('⚠️   download timed out — skip');
+      results.push({ name, status: 'skip', reason: 'download timeout' });
+      continue;
+    }
+
+    // Copy to report dir with a predictable name for side-by-side
+    const exportPath = path.join(REPORT_DIR, `${safeName}_export.png`);
+    fs.copyFileSync(downloadedPath, exportPath);
+
+    // ── 3. Pixel-compare ─────────────────────────────────────────────────
+    const previewPng  = PNG.sync.read(fs.readFileSync(previewPath));
+    const downloadPng = PNG.sync.read(fs.readFileSync(exportPath));
+
+    // Scale the 4× hi-res export down to the preview screenshot's pixel dimensions
+    const scaled = resizePNG(downloadPng, previewPng.width, previewPng.height);
+
+    // Flatten both images onto a solid dark background (#1a1a1f) before comparing.
+    // The preview screenshot has the checker grid showing through transparent areas;
+    // the export PNG is fully transparent outside the sticker. Flattening both onto
+    // the same solid colour makes transparency differences invisible to pixelmatch,
+    // so only actual content differences count.
+    const flatPreview = flattenPNG(previewPng);
+    const flatScaled  = flattenPNG(scaled);
 
     const diffPng  = new PNG({ width: previewPng.width, height: previewPng.height });
     const mismatch = pixelmatch(
-      previewPng.data, scaled.data, diffPng.data,
+      flatPreview.data, flatScaled.data, diffPng.data,
       previewPng.width, previewPng.height,
-      { threshold: 0.15 }  // generous threshold to account for sub-pixel rendering
+      { threshold: 0.20 }   // absorbs sub-pixel font-hinting differences between
+                            // Puppeteer native screenshot and html2canvas render
     );
 
-    const totalPx   = previewPng.width * previewPng.height;
+    // Save diff image
+    const diffPath = path.join(REPORT_DIR, `${safeName}_diff.png`);
+    fs.writeFileSync(diffPath, PNG.sync.write(diffPng));
+
+    // Save side-by-side (flattened, so they look the same on any background)
+    const sbsPath = path.join(REPORT_DIR, `${safeName}_compare.png`);
+    saveSideBySide(flatPreview, flatScaled, sbsPath);
+
+    const totalPx    = previewPng.width * previewPng.height;
     const similarity = (((totalPx - mismatch) / totalPx) * 100).toFixed(1);
     const passed     = parseFloat(similarity) >= 90;
 
-    // Save side-by-side comparison
-    const sbsPath = path.join(REPORT_DIR, `${name.replace(/[^a-z0-9]/gi, '_')}_compare.png`);
-    saveSideBySide(previewPng, scaled, sbsPath);
-
-    result.similarity = similarity + '%';
-    result.status      = passed ? '✅ PASS' : '❌ FAIL';
-    console.log(`${result.status}  (${similarity}% similar)`);
-    results.push(result);
+    const status = passed ? '✅ PASS' : '❌ FAIL';
+    console.log(`${status}  (${similarity}% similar)`);
+    results.push({ name, status, similarity: similarity + '%', mismatch, totalPx });
   }
 
   await browser.close();
 
-  // Print summary table
-  console.log('\n══════════════════════════════════════════════════');
+  // ── summary ─────────────────────────────────────────────────────────────
+  console.log('\n══════════════════════════════════════════════════════');
   console.log('  Sticker Comparison Summary');
-  console.log('══════════════════════════════════════════════════');
+  console.log('══════════════════════════════════════════════════════');
   const pad = (s, n) => String(s).padEnd(n);
-  console.log(`  ${pad('Name', 20)}  ${pad('Status', 10)}  Similarity`);
-  console.log('  ' + '─'.repeat(46));
+  console.log(`  ${pad('Name', 22)} ${pad('Status', 12)} Similarity`);
+  console.log('  ' + '─'.repeat(50));
   for (const r of results) {
-    console.log(`  ${pad(r.name, 20)}  ${pad(r.status, 10)}  ${r.similarity || r.reason || ''}`);
+    console.log(`  ${pad(r.name, 22)} ${pad(r.status, 12)} ${r.similarity || r.reason || ''}`);
   }
 
-  const passes = results.filter(r => r.status.includes('PASS')).length;
-  const fails  = results.filter(r => r.status.includes('FAIL')).length;
+  const passes = results.filter(r => String(r.status).includes('PASS')).length;
+  const fails  = results.filter(r => String(r.status).includes('FAIL')).length;
   const skips  = results.filter(r => r.status === 'skip').length;
-  console.log(`\n  Total: ${results.length}  ✅ ${passes} pass  ❌ ${fails} fail  ⚠️  ${skips} skip`);
+  console.log(`\n  Total: ${results.length}   ✅ ${passes} pass   ❌ ${fails} fail   ⚠️  ${skips} skip`);
 
-  // Save JSON report
   const reportPath = path.join(REPORT_DIR, 'summary.json');
   fs.writeFileSync(reportPath, JSON.stringify(results, null, 2));
-  console.log(`\n📁  Side-by-side PNGs + summary saved to: ${REPORT_DIR}`);
+  console.log(`\n📁  Side-by-side PNGs + diff + summary saved to:\n    ${REPORT_DIR}\n`);
 
   process.exit(fails > 0 ? 1 : 0);
 }
