@@ -19,36 +19,23 @@ export async function stickerToBlob(element: HTMLElement): Promise<Blob> {
   // is no backdrop behind the node inside the SVG — so the fallbacks stay required.
   element.classList.add('is-export')
 
-  // Auto-detect whether the sticker has its own opaque background.
-  // Transparent-overlay stickers (Big Number, Bold Caps, VHS, etc.) use white text
-  // with no card background — they look correct on the dark checker stage but export
-  // as an invisible transparent PNG when viewed in any white-background context.
-  // For these we bake in the checker's dark colour (#1a1a1f) so the export is usable
-  // as a standalone graphic. Stickers with their own card background keep null so the
-  // card shape clips cleanly at the PNG boundary.
-  const stickerRoot = element.firstElementChild as HTMLElement | null
-  const computedBg = stickerRoot ? getComputedStyle(stickerRoot).backgroundColor : 'rgba(0,0,0,0)'
-  const isTransparent =
-    !computedBg ||
-    computedBg === 'transparent' ||
-    computedBg === 'rgba(0, 0, 0, 0)'
-  const backgroundColor = isTransparent ? '#1a1a1f' : null
-
   try {
     // modern-screenshot serialises the live node into an SVG <foreignObject> and lets
     // the browser render it. Unlike html2canvas (which re-implements layout and drifts
     // on line-height / flex vertical rhythm at scale), the browser reproduces the exact
     // text metrics the user sees in the preview — so the PNG matches the preview.
     //
-    // Pin the box to the live size + EXPORT_PAD on every side. Under
-    // `box-sizing: border-box` the grown width/height keep the content area exactly
-    // equal to the live sticker, so the padding becomes transparent breathing room
-    // (no squeeze, no clip) — drop-shadows, glyph descenders and the final split row
-    // all clear the PNG edge. Child margins are preserved (see .is-export in
-    // globals.css), so the card fills this height with no dead gap.
+    // Always transparent (backgroundColor: null): the sticker is exported as-is, a
+    // standalone widget with no baked backdrop. Pin the box to the live size +
+    // EXPORT_PAD on every side. Under `box-sizing: border-box` the grown width/height
+    // keep the content area exactly equal to the live sticker, so the padding becomes
+    // transparent breathing room (no squeeze, no clip) — drop-shadows, glyph
+    // descenders and the final split row all clear the PNG edge. Child margins are
+    // preserved (see .is-export in globals.css), so the card fills the height with no
+    // dead gap.
     return await domToBlob(element, {
       scale: 4,
-      backgroundColor,
+      backgroundColor: null,
       width: width + EXPORT_PAD * 2,
       height: height + EXPORT_PAD * 2,
       style: { padding: `${EXPORT_PAD}px` },
