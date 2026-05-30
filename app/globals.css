@@ -1927,13 +1927,11 @@ button:disabled {
 .ovl-rcpt-divider {
   height: 1px;
   margin: 3px 0;
-  background-image: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.3) 0,
-    rgba(0, 0, 0, 0.3) 4px,
-    transparent 4px,
-    transparent 7px
-  );
+  background-image: linear-gradient(to right,
+      rgba(0, 0, 0, 0.3) 0,
+      rgba(0, 0, 0, 0.3) 4px,
+      transparent 4px,
+      transparent 7px);
   background-size: 7px 1px;
   background-repeat: repeat-x;
 }
@@ -2218,7 +2216,7 @@ button:disabled {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  width: 280px;
+  width: 240px;
 }
 
 .ovl-strip-row {
@@ -2229,43 +2227,46 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px 10px 14px;
-  border-radius: 7px;
-  gap: 0;
+  padding: 0 16px;
+  border-radius: 0;
+  height: 52px;
+  box-sizing: border-box;
 }
 
 .ovl-strip-lbl {
   font-family: var(--font-display);
-  font-size: 9px;
-  font-weight: 700;
+  font-size: 8.5px;
+  font-weight: 800;
   letter-spacing: 0.12em;
-  color: rgba(0, 0, 0, 0.55);
+  color: rgba(0, 0, 0, 0.45);
   text-transform: uppercase;
   flex-shrink: 0;
-  min-width: 58px;
 }
 
 .ovl-strip-rhs {
   display: flex;
-  align-items: baseline;
-  gap: 4px;
+  align-items: center;
+  gap: 3px;
 }
 
 .ovl-strip-val {
   font-family: var(--font-display);
-  font-size: 56px;
+  font-size: 32px;
   font-weight: 900;
   color: #111;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   line-height: 1;
+  display: flex;
+  align-items: center;
 }
 
 .ovl-strip-unit {
   font-family: var(--font-display);
-  font-size: 16px;
-  font-weight: 700;
-  color: rgba(0, 0, 0, 0.5);
-  letter-spacing: 0.02em;
+  font-size: 11px;
+  font-weight: 800;
+  color: rgba(0, 0, 0, 0.4);
+  letter-spacing: 0.04em;
+  margin-left: 2px;
 }
 
 /* ============================================================
@@ -2418,7 +2419,7 @@ button:disabled {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 18px;
+  padding: 12px 24px;
   font-weight: 800;
   letter-spacing: 0.06em;
   font-size: 12px;
@@ -2440,23 +2441,20 @@ button:disabled {
 }
 
 .ovl-bib-body {
-  padding: 0 22px 14px;
+  padding: 0 24px 14px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-/* Hero distance row. line-height 1 keeps descenders inside the box.
-   Negative margin-top absorbs the font's intrinsic ascent above cap-height — without
-   this, the 88px glyphs leave a ~20px ghost gap above them that html2canvas amplifies
-   at 4× scale into a large empty band in the exported PNG. */
+/* Hero distance row. line-height 1 keeps descenders inside the box. */
 .ovl-bib-distance {
   display: flex;
   align-items: baseline;
   gap: 2px;
   line-height: 1;
-  padding-bottom: 6px;
-  margin-top: -16px;
+  padding-bottom: 2px;
+  margin-top: 12px;
 }
 
 .ovl.ovl-bib .ovl-bib-dist-v {
@@ -2486,13 +2484,13 @@ button:disabled {
   font-size: 18px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin: 0;
+  margin: 6px 0 0;
 }
 
 .ovl-bib-rule {
   height: 1px;
   background: rgba(13, 19, 32, 0.25);
-  margin: 8px 0 0;
+  margin: 12px 0 0;
 }
 
 /* Stats row: three columns split by faint vertical rules */
@@ -2500,6 +2498,7 @@ button:disabled {
   display: flex;
   align-items: stretch;
   padding: 0;
+  margin-top: 6px;
 }
 
 .ovl-bib-stat {
@@ -2538,7 +2537,7 @@ button:disabled {
   align-items: center;
   justify-content: space-between;
   background: #0d1320;
-  padding: 10px 18px;
+  padding: 10px 24px;
   font-weight: 800;
   font-size: 13px;
 }
@@ -2735,4 +2734,593 @@ button:disabled {
 
 .tile-stage-light .ovl-hl-line-2 {
   color: rgba(0, 0, 0, 0.7);
+}
+
+/* ============================================================
+   STICKER — Completed Checklist
+   ============================================================ */
+.ovl-completed {
+  width: 220px;
+  background: rgba(10, 10, 12, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ovl-comp-badge {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+}
+
+.ovl-comp-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.ovl-comp-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ovl-comp-box {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.ovl-comp-box.is-checked {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.ovl-comp-details {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.ovl-comp-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.05em;
+}
+
+.ovl-comp-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ovl-comp-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.45);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+  margin-top: 6px;
+}
+
+/* ============================================================
+   STICKER — Heartbeat
+   ============================================================ */
+.ovl-heartbeat {
+  width: 220px;
+  background: rgba(10, 10, 12, 0.88);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.ovl-hb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  margin-bottom: 14px;
+  letter-spacing: 0.05em;
+}
+
+.ovl-hb-title {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.ovl-hb-status {
+  font-weight: 600;
+}
+
+.ovl-hb-body {
+  margin-bottom: 12px;
+  text-align: left;
+}
+
+.ovl-hb-rate {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.ovl-hb-num {
+  font-family: var(--font-display);
+  font-size: 38px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+}
+
+.ovl-hb-unit {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.ovl-hb-wave {
+  margin-top: 10px;
+}
+
+.ovl-hb-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.4);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 10px;
+}
+
+.ovl-hb-accent-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+}
+
+/* ============================================================
+   STICKER — Verified
+   ============================================================ */
+.ovl-verified {
+  width: 200px;
+  background: rgba(10, 10, 12, 0.9);
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.ovl-vf-badge-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 14px;
+}
+
+.ovl-vf-badge {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  border: 2px solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ovl-vf-check {
+  filter: drop-shadow(0 2px 8px currentColor);
+}
+
+.ovl-vf-content {
+  padding: 0 16px 20px;
+  text-align: center;
+}
+
+.ovl-vf-status {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: -0.01em;
+}
+
+.ovl-vf-subtitle {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+  margin-top: 2px;
+  margin-bottom: 16px;
+}
+
+.ovl-vf-stats {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding-top: 12px;
+}
+
+.ovl-vf-stat {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.ovl-vf-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.05em;
+}
+
+.ovl-vf-val {
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  margin-top: 1px;
+}
+
+.ovl-vf-foot {
+  padding: 8px 12px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================
+   STICKER — Retro Window
+   ============================================================ */
+.ovl-window {
+  width: 220px;
+  background: rgba(12, 12, 14, 0.92);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+  font-family: var(--font-mono);
+}
+
+.ovl-win-titlebar {
+  display: flex;
+  align-items: center;
+  height: 28px;
+  padding: 0 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-bottom: 1px solid;
+}
+
+.ovl-win-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.ovl-win-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.ovl-win-title {
+  flex: 1;
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding-right: 36px;
+  /* offset the dots for center align */
+}
+
+.ovl-win-body {
+  padding: 14px;
+  text-align: left;
+}
+
+.ovl-win-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.ovl-win-prompt {
+  font-weight: bold;
+}
+
+.ovl-win-cmd {
+  color: #fff;
+}
+
+.ovl-win-outputs {
+  margin: 10px 0 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 12px;
+}
+
+.ovl-win-out-row {
+  display: flex;
+  gap: 6px;
+  font-size: 11px;
+}
+
+.ovl-win-key {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.ovl-win-cursor {
+  width: 6px;
+  height: 11px;
+  display: inline-block;
+  animation: win-blink 1s step-end infinite;
+}
+
+@keyframes win-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ============================================================
+   STICKER — Brutalist Swiss Grid
+   ============================================================ */
+.ovl-swissgrid {
+  width: 220px;
+  background: #000;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 18px 16px;
+  color: #fff;
+  text-align: left;
+}
+
+.ovl-sg-top {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ovl-sg-brand {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.ovl-sg-hero {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.ovl-sg-hero-num {
+  font-family: var(--font-display);
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+}
+
+.ovl-sg-hero-unit {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.ovl-sg-divider {
+  height: 3px;
+  margin: 14px 0;
+}
+
+.ovl-sg-main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.ovl-sg-col {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.ovl-sg-metric {
+  display: flex;
+  flex-direction: column;
+}
+
+.ovl-sg-label {
+  font-family: var(--font-mono);
+  font-size: 7.5px;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.05em;
+}
+
+.ovl-sg-val {
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-top: 1px;
+}
+
+.ovl-sg-foot {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Light-stage overrides for our 5 new templates */
+.tile-stage-light .ovl-completed {
+  background: rgba(245, 245, 247, 0.9);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.tile-stage-light .ovl-comp-value {
+  color: #111;
+}
+
+.tile-stage-light .ovl-comp-label {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.tile-stage-light .ovl-comp-foot {
+  border-top-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.tile-stage-light .ovl-heartbeat {
+  background: rgba(245, 245, 247, 0.9);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.tile-stage-light .ovl-hb-num {
+  color: #111;
+}
+
+.tile-stage-light .ovl-hb-title {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.tile-stage-light .ovl-hb-foot {
+  border-top-color: rgba(0, 0, 0, 0.08);
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.tile-stage-light .ovl-verified {
+  background: rgba(245, 245, 247, 0.9);
+  border-color: rgba(0, 0, 0, 0.08);
+}
+
+.tile-stage-light .ovl-vf-status {
+  color: #111;
+}
+
+.tile-stage-light .ovl-vf-subtitle {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.tile-stage-light .ovl-vf-stats {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+
+.tile-stage-light .ovl-vf-val {
+  color: #111;
+}
+
+.tile-stage-light .ovl-vf-label {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.tile-stage-light .ovl-window {
+  background: rgba(245, 245, 247, 0.92);
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+}
+
+.tile-stage-light .ovl-win-title {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.tile-stage-light .ovl-win-cmd {
+  color: #111;
+}
+
+.tile-stage-light .ovl-win-key {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.tile-stage-light .ovl-swissgrid {
+  background: #f5f5f7;
+  border-color: rgba(0, 0, 0, 0.12);
+  color: #111;
+}
+
+.tile-stage-light .ovl-sg-hero-num {
+  color: #111;
+}
+
+.tile-stage-light .ovl-sg-label {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.tile-stage-light .ovl-sg-val {
+  color: #111;
+}
+
+.tile-stage-light .ovl-sg-foot {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.is-export {
+  background: transparent !important;
+  /* padding intentionally omitted: lib/export.ts sets it inline (EXPORT_PAD) so the
+     PNG keeps transparent breathing room around the sticker. */
+  margin: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.is-export::before,
+.is-export::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Drop child glow/shadow during export so it doesn't bleed into the transparent PNG.
+   NOTE: child margins are deliberately preserved — single-render captures the same card
+   the user sees, and inter-section margins (Race Bib body, Swiss Grid sections, etc.) are
+   part of the layout. Zeroing them collapsed cards vertically (the export "shrink" bug). */
+.is-export .ovl,
+.is-export [class*="ovl-"] {
+  box-shadow: none !important;
+}
+
+/* ── backdrop-filter fallbacks ─────────────────────────────────────────────
+   html2canvas cannot render backdrop-filter at all — it silently ignores it,
+   leaving only the raw rgba background (which looks washed-out / translucent
+   over a black void). Replace with a solid-equivalent colour so the PNG
+   matches what the user sees in the preview.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* Route Data sticker: rgba(0,0,0,0.4) + blur → solid near-black */
+.is-export .ovl-routedata {
+  backdrop-filter: none !important;
+  background: rgba(0, 0, 0, 0.88) !important;
+}
+
+/* Equation chip: rgba(255,255,255,0.08) + blur → legible frosted tint */
+.is-export .ovl-eq-chip {
+  backdrop-filter: none !important;
+  background: rgba(255, 255, 255, 0.18) !important;
+}
+
+/* Completed checklist: rgba(10,10,12,0.85) + blur → solid dark card */
+.is-export .ovl-completed {
+  backdrop-filter: none !important;
+  background: rgba(10, 10, 12, 0.97) !important;
 }

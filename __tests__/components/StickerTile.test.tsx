@@ -35,19 +35,19 @@ describe('StickerTile', () => {
   })
 
   it('renders tile name', () => {
-    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" bg="dark" />)
+    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" />)
     expect(screen.getByText('Big Number')).toBeInTheDocument()
   })
 
   it('shows Copied when clipboard write succeeds', async () => {
-    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" bg="dark" />)
+    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" />)
     fireEvent.click(screen.getByText('Copy'))
     await waitFor(() => expect(screen.getByText('Copied')).toBeInTheDocument())
   })
 
   it('shows Shared when clipboard fails but navigator.share succeeds', async () => {
     ;(exportLib.copyBlobToClipboard as jest.Mock).mockRejectedValue(new Error('not supported'))
-    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" bg="dark" />)
+    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" />)
     fireEvent.click(screen.getByText('Copy'))
     await waitFor(() => expect(screen.getByText('Shared')).toBeInTheDocument())
   })
@@ -55,7 +55,7 @@ describe('StickerTile', () => {
   it('calls downloadBlob when both clipboard and share fail', async () => {
     ;(exportLib.copyBlobToClipboard as jest.Mock).mockRejectedValue(new Error('not supported'))
     ;(exportLib.shareBlobFile as jest.Mock).mockRejectedValue(new Error('not supported'))
-    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" bg="dark" />)
+    render(<StickerTile def={def} run={run} visible={visible} accent="#FF5A1F" />)
     fireEvent.click(screen.getByText('Copy'))
     await waitFor(() => expect(exportLib.downloadBlob).toHaveBeenCalled())
   })
