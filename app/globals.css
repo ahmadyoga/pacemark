@@ -1383,6 +1383,52 @@ button:disabled {
   color: var(--accent);
 }
 
+.tile-head-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.tile-zoom {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.tile-zoom-btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  padding: 2px 6px;
+  line-height: 1;
+  transition: all 0.15s;
+}
+
+.tile-zoom-btn:hover:not(:disabled) {
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.tile-zoom-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.tile-zoom-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-dim);
+  letter-spacing: 0.03em;
+  min-width: 28px;
+  text-align: center;
+}
+
 .tile-name {
   font-family: var(--font-display);
   font-size: 13.5px;
@@ -1408,6 +1454,7 @@ button:disabled {
   align-items: center;
   justify-content: center;
   padding: 24px;
+  overflow: hidden;
   border-top: 1px solid var(--line);
   border-bottom: 1px solid var(--line);
 }

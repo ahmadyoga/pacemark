@@ -9,15 +9,6 @@ export async function stickerToBlob(element: HTMLElement): Promise<Blob> {
     logging: false,
     width: width,
     height: height,
-    onclone: (clonedDoc) => {
-      // Ensure the cloned element is visible and has correct dimensions
-      const clonedEl = clonedDoc.querySelector('[ref="captureRef"]') as HTMLElement
-      if (clonedEl) {
-        clonedEl.style.position = 'relative'
-        clonedEl.style.left = '0'
-        clonedEl.style.top = '0'
-      }
-    }
   })
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {

@@ -21,7 +21,6 @@ export function StickerGlowSplits({ run, visible, accent }: StickerProps) {
         const ratio = (s.speed - minSpeed) / range
         const opacity = 0.18 + ratio * 0.82
         const width = 28 + ratio * 62
-        const glow = ratio > 0.65 ? `0 0 ${ratio * 14}px ${accent}88` : 'none'
         const kmDisplay = !useRounded ? s.km : s.roundedKm
 
         return (
@@ -34,7 +33,6 @@ export function StickerGlowSplits({ run, visible, accent }: StickerProps) {
                   width: `${width}%`,
                   backgroundColor: accent,
                   opacity,
-                  boxShadow: glow,
                 }}
               />
             </div>

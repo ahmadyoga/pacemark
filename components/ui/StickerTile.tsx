@@ -17,6 +17,7 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
   const [copyLabel, setCopyLabel] = useState('')
   const [saveState, setSaveState] = useState<'idle' | 'working' | 'done'>('idle')
   const [rounded, setRounded] = useState(false)
+  const [zoom, setZoom] = useState(1)
 
   const Comp = def.comp
   const hasRounding = def.id === 'glowsplits' || def.id === 'pacesplits'
@@ -65,33 +66,54 @@ export function StickerTile({ def, run, visible, accent, bg }: StickerTileProps)
           <div className="tile-name">{def.name}</div>
           <div className="tile-desc">{def.desc}</div>
         </div>
-        {hasRounding && (
-          <button
-            className={`tile-round-toggle ${rounded ? 'is-active' : ''}`}
-            onClick={() => setRounded(!rounded)}
-          >
-            Round
-          </button>
-        )}
+        <div className="tile-head-controls">
+          {hasRounding && (
+            <button
+              className={`tile-round-toggle ${rounded ? 'is-active' : ''}`}
+              onClick={() => setRounded(!rounded)}
+            >
+              Round
+            </button>
+          )}
+          <div className="tile-zoom">
+            <button
+              className="tile-zoom-btn"
+              onClick={() => setZoom(z => Math.max(0.5, +(z - 0.25).toFixed(2)))}
+              disabled={zoom <= 0.5}
+              aria-label="Zoom out"
+            >−</button>
+            <span className="tile-zoom-label">{Math.round(zoom * 100)}%</span>
+            <button
+              className="tile-zoom-btn"
+              onClick={() => setZoom(z => Math.min(3, +(z + 0.25).toFixed(2)))}
+              disabled={zoom >= 3}
+              aria-label="Zoom in"
+            >+</button>
+          </div>
+        </div>
       </div>
       <div className={`tile-stage tile-stage-${bg}`}>
-        <div className="tile-stage-inner">
+        <div
+          className="tile-stage-inner"
+          style={zoom !== 1 ? { transform: `scale(${zoom})` } : undefined}
+        >
           <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
         </div>
       </div>
-      {/* Off-screen capture target: wrapper is `inline-block` and sized exactly to the sticker so
-          the exported PNG has no asymmetric transparent border (cropped tight to the sticker). */}
+      {/* Off-screen export target — mirrors tile-stage so PNG includes background + padding.
+          Uses inline-flex so it shrinks to content width rather than stretching to container. */}
       <div
-        style={{
-          position: 'fixed',
-          left: -9999,
-          top: -9999,
-          pointerEvents: 'none',
-        }}
+        style={{ position: 'fixed', left: -9999, top: -9999, pointerEvents: 'none' }}
         aria-hidden="true"
       >
-        <div ref={captureRef} style={{ display: 'inline-block' }}>
-          <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
+        <div
+          ref={captureRef}
+          className={`tile-stage tile-stage-${bg}`}
+          style={{ border: 'none', aspectRatio: 'unset', display: 'inline-flex', position: 'relative' }}
+        >
+          <div className="tile-stage-inner">
+            <Comp run={run} visible={{ ...visible, rounded }} accent={accent} />
+          </div>
         </div>
       </div>
       <div className="tile-actions">
