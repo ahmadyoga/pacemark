@@ -31,7 +31,11 @@ export async function GET() {
       activities.map((a) => toDisplayActivity(a))
     )
     return NextResponse.json(displayActivities)
-  } catch {
-    return NextResponse.json({ error: 'strava_error' }, { status: 502 })
+  } catch (err) {
+    console.error('strava_error', err)
+    return NextResponse.json(
+      { error: 'strava_error', detail: err instanceof Error ? err.message : String(err) },
+      { status: 502 }
+    )
   }
 }

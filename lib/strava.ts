@@ -194,7 +194,7 @@ export async function toDisplayActivity(
   const date = new Date(a.start_date)
   let city = a.location_city || a.location_country || 'Unknown'
 
-  if ((!a.location_city || a.location_city === 'null') && a.start_latlng) {
+  if ((!a.location_city || a.location_city === 'null') && a.start_latlng?.[0] != null && a.start_latlng?.[1] != null) {
     city = await resolveCity(a.start_latlng[0], a.start_latlng[1])
   }
 
@@ -261,7 +261,10 @@ export async function getActivitiesFromStrava(
     `https://www.strava.com/api/v3/athlete/activities?per_page=${perPage}`,
     { headers: { Authorization: `Bearer ${accessToken}` } }
   )
-  if (!res.ok) throw new Error('strava_api_error')
+  if (!res.ok) {
+    const body = await res.text().catch(() => '')
+    throw new Error(`strava_api_error: ${res.status} ${body}`)
+  }
   return res.json()
 }
 
