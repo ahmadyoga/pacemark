@@ -13,6 +13,7 @@ import { StickerRouteData } from './StickerRouteData'
 import { StickerPaceSplits } from './StickerPaceSplits'
 import { StickerThermalReceipt } from './StickerThermalReceipt'
 import { StickerMapOnly } from './StickerMapOnly'
+import { StickerMapPure } from './StickerMapPure'
 import { StickerMapStats } from './StickerMapStats'
 import { StickerMapPanel } from './StickerMapPanel'
 import { StickerGlowSplits } from './StickerGlowSplits'
@@ -48,6 +49,7 @@ export const STICKER_DEFS: StickerDef[] = [
   { id: 'pacesplits', name: 'Pace Splits', desc: 'Per-km bars', comp: StickerPaceSplits },
   { id: 'thermalreceipt', name: 'Thermal Receipt', desc: 'Paper receipt', comp: StickerThermalReceipt },
   { id: 'maponly', name: 'Map Only', desc: 'Route art', comp: StickerMapOnly },
+  { id: 'mappure', name: 'Map Pure', desc: 'No background', comp: StickerMapPure },
   { id: 'mapstats', name: 'Map + Stats', desc: 'Route + bar', comp: StickerMapStats },
   { id: 'mappanel', name: 'Map Panel', desc: 'Route + panel', comp: StickerMapPanel },
   { id: 'glowsplits', name: 'Glow Splits', desc: 'Opacity bars', comp: StickerGlowSplits },

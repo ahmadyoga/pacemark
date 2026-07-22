@@ -5,7 +5,7 @@ export function StickerMapStats({ run, accent }: StickerProps) {
   return (
     <div className="ovl ovl-mapstats">
       <div className="ovl-ms-route">
-        <MapRoute points={run.routePoints} stroke={accent} strokeWidth={2.5} />
+        <MapRoute points={run.routePoints} stroke={accent} strokeWidth={2} />
       </div>
       <div className="ovl-ms-bar">
         <div className="ovl-ms-stat">
