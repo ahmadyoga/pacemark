@@ -17,6 +17,7 @@ import { StickerMapPure } from './StickerMapPure'
 import { StickerMapStats } from './StickerMapStats'
 import { StickerMapPanel } from './StickerMapPanel'
 import { StickerGlowSplits } from './StickerGlowSplits'
+import { StickerBarSplits } from './StickerBarSplits'
 import { StickerStaggeredStrips } from './StickerStaggeredStrips'
 import { StickerTerminal } from './StickerTerminal'
 import { StickerVerticalRun } from './StickerVerticalRun'
@@ -53,6 +54,7 @@ export const STICKER_DEFS: StickerDef[] = [
   { id: 'mapstats', name: 'Map + Stats', desc: 'Route + bar', comp: StickerMapStats },
   { id: 'mappanel', name: 'Map Panel', desc: 'Route + panel', comp: StickerMapPanel },
   { id: 'glowsplits', name: 'Glow Splits', desc: 'Opacity bars', comp: StickerGlowSplits },
+  { id: 'barsplits', name: 'Bar Splits', desc: 'Solid bars, label inside', comp: StickerBarSplits },
   { id: 'strips', name: 'Strips', desc: 'Staggered', comp: StickerStaggeredStrips },
   { id: 'terminal', name: 'Terminal', desc: 'CLI style', comp: StickerTerminal },
   { id: 'vertrun', name: 'Vertical Run', desc: 'Stack numbers', comp: StickerVerticalRun },

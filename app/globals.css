@@ -2214,6 +2214,51 @@ button:disabled {
 }
 
 /* ============================================================
+   STICKER — Bar Splits (solid bars, labels inside)
+   ============================================================ */
+
+.ovl-barsplits {
+  width: 340px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.ovl-bs-bar-wrap {
+  width: 100%;
+}
+
+.ovl-bs-bar {
+  height: 64px;
+  min-width: 140px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.ovl-bs-km {
+  font-family: var(--font-mono);
+  font-size: 32px;
+  font-weight: 700;
+  color: #000;
+}
+
+.ovl-bs-pace {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 700;
+  color: #000;
+}
+
+.ovl-bs-empty {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+/* ============================================================
    STICKER — Staggered Strips
    ============================================================ */
 

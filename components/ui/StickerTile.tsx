@@ -18,7 +18,7 @@ export function StickerTile({ def, run, visible, accent }: StickerTileProps) {
   const [rounded, setRounded] = useState(false)
 
   const Comp = def.comp
-  const hasRounding = def.id === 'glowsplits' || def.id === 'pacesplits'
+  const hasRounding = def.id === 'glowsplits' || def.id === 'pacesplits' || def.id === 'barsplits'
   const filename = stickerFilename({ stickerId: def.id, title: run.title, distance: run.distance })
 
   async function handleCopy() {
